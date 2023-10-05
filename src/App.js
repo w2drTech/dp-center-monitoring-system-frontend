@@ -12,6 +12,7 @@ function App() {
         <div className="app">
           <main className="content">
             <Topbar/>
+            <div>test</div>
           </main>
         </div>
       </ThemeProvider>
