@@ -3,6 +3,7 @@ import Topbar from "./scenes/global/Topbar";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import SidebarComponent from "./scenes/global/Sidebar";
+import Dashboard from "./scenes/dashboard";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -15,7 +16,7 @@ function App() {
         <SidebarComponent />
           <main className="content">
             <Topbar/>
-            <div>test</div>
+            <Dashboard/>
           </main>
         </div>
       </ThemeProvider>
