@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { Sidebar, Menu, MenuItem, ProSidebar, SubMenu } from "react-pro-sidebar";
+import {
+  Menu,
+  MenuItem,
+  ProSidebar,
+  SubMenu,
+} from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlinedIcon from "@mui/icons-material/PieChartOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import "react-pro-sidebar/dist/css/styles.css";
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -29,7 +27,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     </MenuItem>
   );
 };
-const SidebarComponent = () => {
+const SidebarComponent = ({ menuItems }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -107,56 +105,38 @@ const SidebarComponent = () => {
             </Box>
           )}
           {/* {MEnu Items} */}
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-            <Item
-              title="Dashboard"
-              to="/"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Menu 1"
-              to="/menu-1"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Menu 2"
-              to="/menu-2"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Menu 3"
-              to="/menu-3"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Menu 4"
-              to="/menu-4"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-          <SubMenu 
-            title="Charts"
-            icon={<HomeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          >
-            <Item
-              title="Menu 5"
-              to="/menu-5"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-          </SubMenu>
+          <Box paddingLeft={isCollapsed ? undefined : "0%"}>
+            {menuItems.map((item, index) =>
+              item.subItems ? ( // Check if it has subItems
+                <SubMenu
+                  key={index}
+                  title={item.title}
+                  icon={item.icon}
+                  selected={selected}
+                  setSelected={setSelected}
+                >
+                  {item.subItems.map((subItem, subIndex) => (
+                    <Item
+                      key={subIndex}
+                      title={subItem.title}
+                      to={subItem.to}
+                      icon={subItem.icon}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  ))}
+                </SubMenu>
+              ) : (
+                <Item
+                  key={index}
+                  title={item.title}
+                  to={item.to}
+                  icon={item.icon}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )
+            )}
           </Box>
         </Menu>
       </ProSidebar>
