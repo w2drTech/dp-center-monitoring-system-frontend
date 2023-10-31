@@ -10,43 +10,41 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import PhotoIcon from "@mui/icons-material/Photo"; // Replace with your desired icon
-
+import { useLocation } from "react-router-dom";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
-const socialMediaIcons = [
-  {
-    name: "Facebook",
-    icon: `${faCoffee}`,
-    link: "https://www.facebook.com",
-  },
-  { name: "Twitter", icon: "fab fa-twitter", link: "https://www.twitter.com" },
-  {
-    name: "Instagram",
-    icon: "fab fa-instagram",
-    link: "https://www.instagram.com",
-  },
-  {
-    name: "LinkedIn",
-    icon: "fab fa-linkedin",
-    link: "https://www.linkedin.com",
-  },
-];
+import { updateAttendance } from "../../services/studentAttendanceService";
+import { toast } from "react-toastify";
 
 const HomeComponent = ({ images }) => {
   const [current, setCurrent] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
+  const [studentName, setStudentName] = useState("");
+  const [attendanceKey, setAttendanceKey] = useState("");
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   let timeOut = null;
-
   useEffect(() => {
-    timeOut =
-      autoPlay &&
-      setTimeout(() => {
-        slideRight();
-      }, 10000);
+    const stdName = localStorage.getItem("studentName");
+    const atdKey = localStorage.getItem("studentAttendanceKey");
+    setStudentName(stdName);
+    setAttendanceKey(atdKey);
   });
-
+  const handleAttendanceMark = async () => {
+    try {
+      const response = await updateAttendance(attendanceKey);
+      if (response.data.o_sql_msg === "success") {
+        localStorage.removeItem("studentName");
+        localStorage.removeItem("studentAttendanceKey");
+        window.location = "/";
+      } else if (response.data.o_sql_msg === "STUDENT ALREADY LOGGED OUT") {
+        toast.error("STUDENT ALREADY LOGGED OUT");
+        window.location = "/";
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   const slideRight = () => {
     setCurrent(current === images.length - 1 ? 0 : current + 1);
   };
@@ -64,8 +62,6 @@ const HomeComponent = ({ images }) => {
       <div className="carousel_wrapper">
         {images.map((image, index) => {
           return (
-            /* (condition) ? true : false */
-
             <div
               key={index}
               className={
@@ -76,17 +72,19 @@ const HomeComponent = ({ images }) => {
             >
               <img className="card_image" src={image.image} alt="" />
               <div className="card_overlay">
-              <Typography
-                          variant="contained"
-                          style={{
-                            top:0,
-                            position:"absolute",
-                            fontSize: "15px",
-                            marginBottom: "10px",
-                            margin:'10px',
-                            width:"100px"
-                          }}
-                        >Haritha</Typography>
+                <Typography
+                  variant="contained"
+                  style={{
+                    top: 0,
+                    position: "absolute",
+                    fontSize: "15px",
+                    marginBottom: "10px",
+                    margin: "10px",
+                    width: "100px",
+                  }}
+                >
+                  {studentName}
+                </Typography>
                 <Card
                   sx={{
                     minWidth: 500,
@@ -95,19 +93,22 @@ const HomeComponent = ({ images }) => {
                 >
                   <CardContent>
                     <Button
-                          variant="contained"
-                          type="submit"
-                          style={{
-                            display:"flex",
-                            position:"absolute",
-                            right:"30px",
-                            backgroundColor: "black",
-                            fontSize: "15px",
-                            marginBottom: "10px",
-                            margin:'10px',
-                            width:"100px"
-                          }}
-                        >Logout</Button>
+                      variant="contained"
+                      type="button"
+                      onClick={handleAttendanceMark}
+                      style={{
+                        display: "flex",
+                        position: "absolute",
+                        right: "30px",
+                        backgroundColor: "black",
+                        fontSize: "15px",
+                        marginBottom: "10px",
+                        margin: "10px",
+                        width: "100px",
+                      }}
+                    >
+                      Logout
+                    </Button>
                     <Typography
                       sx={{ textAlign: "center" }}
                       color="text.secondary"
@@ -119,40 +120,54 @@ const HomeComponent = ({ images }) => {
                   </CardContent>
                   <Box>
                     <CardActions sx={{ justifyContent: "center" }}>
-                      <Box display="grid" >
-                        <Box marginBottom="10px" >
-                          <Button variant="contained" color="error" sx={{width:"300px", height:"70px"}}>
-                            
-                            <IconButton sx={{display:"flex"}}>
-                              <img
-                                src="../../../assets/dpcoding.png"
-                                alt="DP coding logo"
-                                width="100"
-                                height="50"
-                              />
-                            </IconButton>
-                            <Typography variant="h4">
-                              To DP Coding 
-                            </Typography>
-                          </Button>
+                      <Box display="grid">
+                        <Box marginBottom="10px">
+                          <a href="https://dpcode.lk/" target="_blank">
+                            <Button
+                              variant="contained"
+                              color="error"
+                              sx={{ width: "300px", height: "70px" }}
+                            >
+                              <IconButton sx={{ display: "flex" }}>
+                                <img
+                                  src="../../../assets/dpcoding.png"
+                                  alt="DP coding logo"
+                                  width="100"
+                                  height="50"
+                                />
+                              </IconButton>
+                              <Typography variant="h4">To DP Coding</Typography>
+                            </Button>
+                          </a>
                         </Box>
                         <Box marginBottom="10px">
-                          <Button variant="contained" color="error" sx={{width:"300px", height:"70px"}}>
-                            <IconButton>
-                              <img
-                                src="../../../assets/outlooklogo.png"
-                                alt="Your Image"
-                                width="50"
-                                height="50"
-                              />
-                            </IconButton>
-                            <Typography variant="h4">
-                              To Outlook Website
-                            </Typography>
-                          </Button>
+                          <a href="https://outlook.office365.com/mail/?JitExp=1" target="_blank">
+                            <Button
+                              variant="contained"
+                              color="error"
+                              sx={{ width: "300px", height: "70px" }}
+                            >
+                              <IconButton>
+                                <img
+                                  src="../../../assets/outlooklogo.png"
+                                  alt="Your Image"
+                                  width="50"
+                                  height="50"
+                                />
+                              </IconButton>
+                              <Typography variant="h4">
+                                To Outlook Website
+                              </Typography>
+                            </Button>
+                          </a>
                         </Box>
                         <Box>
-                          <Button variant="contained" color="error" sx={{width:"300px", height:"70px"}}>
+                        <a href="https://studio.code.org/users/sign_in" target="_blank">
+                          <Button
+                            variant="contained"
+                            color="error"
+                            sx={{ width: "300px", height: "70px" }}
+                          >
                             <IconButton>
                               <img
                                 src="../../../assets/code.png"
@@ -162,9 +177,10 @@ const HomeComponent = ({ images }) => {
                               />
                             </IconButton>
                             <Typography variant="h4">
-                              To code.org website 
+                              To code.org website
                             </Typography>
                           </Button>
+                          </a>
                         </Box>
                       </Box>
                     </CardActions>

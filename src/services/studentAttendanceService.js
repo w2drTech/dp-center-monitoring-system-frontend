@@ -1,13 +1,38 @@
-import http from './httpService';
-import apiUrl from '../utils/config.json';
+import http from "./httpService";
+import apiConfig from "../utils/config.json";
 
-const apiEndPoint = `${apiUrl}/student-attendance`;
+const apiEndPointForGetStudent = `${apiConfig.apiUrl}students/get/studentLogin`;
+const apiEndpointForInsert = `${apiConfig.apiUrl}students/insert/student`;
+const apiEndPointForMarkAttendance = `${apiConfig.apiUrl}students/insert/student/attendanceIn`;
+const apiEndPointForUpdateAttendance = `${apiConfig.apiUrl}students/update/student/attendanceOut`;
 
-export function getStudent(email,pcId)
-{
-    return http.get(`${apiEndPoint}?email=${email}&pcId=${pcId}`);
+export function getStudent(email) {
+  return http.get(`${apiEndPointForGetStudent}/${email}`);
 }
-
+export function registerStudent(student) {
+  console.log(student);
+  return http.post(apiEndpointForInsert, {
+    studentName: student.name,
+    email: student.email,
+    centerCode: student.center,
+    phoneNumber: student.phone,
+    parentPhoneNumber: student.guardianPhone,
+    address: student.address,
+  });
+}
+export function markAttendance(attendance) {
+  return http.post(apiEndPointForMarkAttendance, {
+    email: attendance.email,
+    pcCode: attendance.pcId,
+  });
+}
+export function updateAttendance(attendanceKey) {
+    return http.put(apiEndPointForUpdateAttendance, {
+        attendanceCode: attendanceKey,
+    });
+  }
 export default {
-    getStudent
-}
+  getStudent,
+  registerStudent,
+  markAttendance
+};

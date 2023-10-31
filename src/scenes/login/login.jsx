@@ -13,6 +13,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
+
 import * as Yup from "yup";
 function Copyright() {
   return (
@@ -37,8 +39,10 @@ const validationSchema = Yup.object().shape({
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const navigate = useNavigate();
   const handleFormSubmit = (values) => {
     console.log("asda" + values.password);
+    window.location.href = 'dashboard/executive'; 
   };
 
   return (

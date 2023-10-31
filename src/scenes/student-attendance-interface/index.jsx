@@ -6,11 +6,26 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import "./style.css";
 import FormHelperText from "@mui/material/FormHelperText";
-import studentAttendanceService from "../../services/studentAttendanceService";
+import studentAttendanceService, {
+  getStudent,
+  markAttendance,
+} from "../../services/studentAttendanceService";
 import Modal from "@mui/material/Modal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 
+const studentAttendanceKey = "studentAttendanceKey";
+const studentNameKey = "studentName";
 const validationSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
+  email: yup
+    .string()
+    .required("required")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format: Enter a valid specific email address"
+    )
+    .trim(),
   pcId: yup
     .string()
     //.matches(phoneRegExp, "Phone number is not valid")
@@ -34,23 +49,49 @@ const style = {
   textAlign: "center",
 };
 
-const handleFormSubmit = async (values, { setSubmitting }) => {};
-
 function Carousel({ images }) {
   const [current, setCurrent] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
+  const [studentName, setStudentName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pcId, setPcId] = useState("");
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   let timeOut = null;
-
+  const handleAttendanceMark = async () => {
+    try {
+      const data = { email: email, pcId: pcId };
+      const response = await markAttendance(data);
+      const attendanceKey = response.data.retunValue;
+      localStorage.setItem(studentAttendanceKey, attendanceKey);
+      localStorage.setItem(studentNameKey, studentName);
+      window.location = "/";
+    } catch (error) {
+      console.error("Error marking attendance:", error);
+      if (error.response) {
+        // Handle response errors (if any)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          toast.warn("An error occurred. Please try again.");
+        } else {
+          toast.error("An unexpected server error occurred.");
+        }
+      } else if (error.request) {
+        // Handle request errors
+        toast.error("Request error. Please check your network connection.");
+      } else {
+        // Handle other errors
+        toast.error("An unexpected error occurred.");
+      }
+    }
+  };
   useEffect(() => {
     timeOut =
       autoPlay &&
       setTimeout(() => {
         slideRight();
-      }, 10000);
+      }, 10000000);
   });
 
   const slideRight = () => {
@@ -87,19 +128,42 @@ function Carousel({ images }) {
             >
               <img className="card_image" src={image.image} alt="" />
               <div className="card_overlay">
-                <Button
-                          variant="contained"
-                          type="submit"
-                          style={{
-                            top:0,
-                            position:"absolute",
-                            backgroundColor: "red",
-                            fontSize: "15px",
-                            marginBottom: "10px",
-                            margin:'10px',
-                            width:"100px"
-                          }}
-                        >Login</Button>
+                <a href="/login">
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    style={{
+                      top: 0,
+                      right: 180,
+                      position: "absolute",
+                      backgroundColor: "red",
+                      fontSize: "15px",
+                      marginBottom: "10px",
+                      margin: "10px",
+                      width: "100px",
+                    }}
+                  >
+                    Login
+                  </Button>
+                </a>
+                <a href="/register">
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    style={{
+                      top: 0,
+                      right: 0,
+                      position: "absolute",
+                      backgroundColor: "red",
+                      fontSize: "15px",
+                      marginBottom: "10px",
+                      margin: "10px",
+                      width: "160px",
+                    }}
+                  >
+                    Student Register
+                  </Button>
+                </a>
                 <Modal
                   open={open}
                   onClose={handleClose}
@@ -112,19 +176,24 @@ function Carousel({ images }) {
                       variant="h2"
                       component="h2"
                     >
-                      HELLO.. User
+                      HELLO.. {studentName}
                     </Typography>
                     <Typography
                       id="modal-modal-description"
                       variant="h3"
                       sx={{ mt: 2 }}
                     >
-                      Welcome to DP Coding Center - 01
+                      Welcome to DP Coding
                     </Typography>
-                    <Box display="flex" justifyContent="space-between" marginTop="10px">
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      marginTop="10px"
+                    >
                       <Button
                         variant="contained"
                         type="submit"
+                        onClick={handleAttendanceMark}
                         style={{
                           backgroundColor: "red",
                           fontSize: "15px",
@@ -140,7 +209,7 @@ function Carousel({ images }) {
                           backgroundColor: "white",
                           fontSize: "15px",
                           marginBottom: "10px",
-                          color:"red"
+                          color: "red",
                         }}
                         onClick={handleClose}
                       >
@@ -152,13 +221,12 @@ function Carousel({ images }) {
                 <Formik
                   onSubmit={async (values, { setSubmitting }) => {
                     setSubmitting(true);
-                    console.log(values);
+
                     try {
-                      // await studentAttendanceService.getStudent(
-                      //   values.email,
-                      //   values.pcId
-                      // );
-                      console.log(values);
+                      const response = await getStudent(values.email);
+                      setStudentName(response.data.studentName);
+                      setPcId(values.pcId);
+                      setEmail(values.email);
                       handleOpen();
                     } catch (ex) {}
                   }}
