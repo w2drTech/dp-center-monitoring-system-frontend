@@ -5,7 +5,6 @@ import ProgressCircle from "./ProgressCircle";
 const StatBox = ({ title, name, progress, value,fullStudentValue }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  console.log(progress)
   return (
     <Box width="100%"  m="0 30px">
       <Typography

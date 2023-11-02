@@ -136,9 +136,9 @@ const StudentAttendance = () => {
           gridRow="span 4"
           backgroundColor={colors.primary[400]}
         >
-          <Box height="420px" m="-20px 0 0 0">
+          {/* <Box height="420px" m="-20px 0 0 0">
             <LineChart isDashboard={true} />
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Box>

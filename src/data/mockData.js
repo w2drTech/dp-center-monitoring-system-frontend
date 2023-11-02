@@ -2,7 +2,7 @@ import { tokens } from "../theme";
 export const mockLineData = [
     {
       id: "japan",
-      color: tokens("dark").greenAccent[500],
+      color: tokens("dark").greenAccent[300],
       data: [
         {
           x: "plane",

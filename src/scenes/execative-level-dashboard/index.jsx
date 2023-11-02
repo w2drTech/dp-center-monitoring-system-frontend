@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getStatBoxData } from "../../services/statboxDataService";
 
+import '../../../src/style.css';
+import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
+
 const ExecutiveLevelDashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -16,24 +19,40 @@ const ExecutiveLevelDashboard = () => {
   const [workingStudent, setWorkingStudents] = useState("");
   const [workingCenters, setWorkingCenters] = useState("");
   const [computerHour, setComputerHours] = useState("");
+  const [lineChartData, setLineChartData] = useState("");
+  var [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchStatBoxData = async () => {
       try {
         const response = await getStatBoxData();
+        const lineChartDataResponse = await getExecutiveDashboardLineChartData();
+        console.log(lineChartDataResponse);
         setTodayStudent(response.data.dailyStudentCount);
         setWorkingStudents(response.data.currentStudentCount);
         setWorkingCenters(response.data.dailyCenterCount);
         setComputerHours(response.data.dailyComputerHours)
         setAllRegisteredStudents(response.data.allStudentCount);
         setAllRegisteredCenters(response.data.allCenterCount);
+        const test =[
+          {
+            id:"Total Student",
+            color: tokens("dark").greenAccent[500],
+            data: lineChartDataResponse.data
+          }
+        ]
+        setLineChartData(test);
       
       } catch (error) {
         toast.error("Error fetching data");
       }
+      
     };
-    fetchStatBoxData();
+    fetchStatBoxData().then(()=>setLoading(loading=false));
   }, []);
-
+  if (loading) {
+    return (
+        <div id="cover-spin"></div>)
+}
   return (
     <Box m="0 20px">
       {/* GRID & CHARTS */}
@@ -109,8 +128,14 @@ const ExecutiveLevelDashboard = () => {
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
-          <Box height="350px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+          <Box  height="350px" m="-20px 0 0 0">
+            <LineChart 
+            
+            isDashboard={true}
+            data={lineChartData}
+            leftAxisName="Student Count"
+            bottomAxisName="Date"
+            />
           </Box>
         </Box>
       </Box>

@@ -1,12 +1,11 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockLineData as data } from "../data/mockData";
 
-const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
+
+const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
   return (
     <ResponsiveLine
       data={data}
@@ -32,11 +31,13 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
             },
           },
         },
+    
         legends: {
           text: {
             fill: colors.grey[100],
           },
         },
+   
         tooltip: {
           container: {
             color: colors.primary[500],
@@ -44,7 +45,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 110, bottom: 60, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
@@ -60,10 +61,10 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
       axisBottom={{
         orient: "bottom",
         tickSize: 0,
-        tickPadding: 5,
+        tickPadding: 8,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "transportation", // added
-        legendOffset: 36,
+        legend: bottomAxisName, // added
+        legendOffset: 26,
         legendPosition: "middle",
       }}
       axisLeft={{
@@ -72,17 +73,21 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         tickSize: 3,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "count", // added
-        legendOffset: -40,
+        legend: leftAxisName, // added
+        legendOffset: -30,
         legendPosition: "middle",
       }}
       enableGridX={false}
       enableGridY={false}
       pointSize={8}
       pointColor={{ theme: "background" }}
+      enablePointLabel={true}
       pointBorderWidth={2}
+      pointLabel={"y"}
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
+      enableArea={true}
+      areaBaselineValue={1}
       useMesh={true}
       legends={[
         {
