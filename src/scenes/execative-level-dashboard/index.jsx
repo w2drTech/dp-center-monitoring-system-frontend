@@ -3,16 +3,36 @@ import { tokens } from "../../theme";
 import StatBox from "../../components/StatBox";
 import AccessibilityIcon from "@mui/icons-material/Accessibility";
 import LineChart from "../../components/LineChart";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
-import Header from "../../components/Header";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getStatBoxData } from "../../services/statboxDataService";
 
 const ExecutiveLevelDashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [todayStudent, setTodayStudent] = useState("");
+  const [allRegisteredStudents, setAllRegisteredStudents] = useState("");
+  const [allRegisteredCenters, setAllRegisteredCenters] = useState("");
+  const [workingStudent, setWorkingStudents] = useState("");
+  const [workingCenters, setWorkingCenters] = useState("");
+  const [computerHour, setComputerHours] = useState("");
+  useEffect(() => {
+    const fetchStatBoxData = async () => {
+      try {
+        const response = await getStatBoxData();
+        setTodayStudent(response.data.dailyStudentCount);
+        setWorkingStudents(response.data.currentStudentCount);
+        setWorkingCenters(response.data.dailyCenterCount);
+        setComputerHours(response.data.dailyComputerHours)
+        setAllRegisteredStudents(response.data.allStudentCount);
+        setAllRegisteredCenters(response.data.allCenterCount);
+      } catch (error) {
+        toast.error("Error fetching data");
+      }
+    };
+    fetchStatBoxData();
+  }, []);
+
   return (
     <Box m="0 20px">
       {/* GRID & CHARTS */}
@@ -24,60 +44,62 @@ const ExecutiveLevelDashboard = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 4"
+          gridColumn="span 3"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
+            name = "todayStudent"
+            title="Today Students"
+            progress="0.85"
+            value={todayStudent}
+            fullStudentValue={allRegisteredStudents}
+          />
+        </Box>
+        <Box
+          gridColumn="span 3"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+          name = "liveStudent"
+            title="Live Working Students"
             progress="0.75"
-            increase="+14%"
-            icon={
-              <EmailIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            value={workingStudent}
+            fullStudentValue={allRegisteredStudents}
           />
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 3"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
+            name = "liveCenters"
+            title="Live Working Centers"
             progress="0.50"
-            increase="+21%"
-            icon={
-              <PointOfSaleIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            value={workingCenters}
+            fullStudentValue={allRegisteredCenters}
           />
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 3"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
-            subtitle="New Clients"
+            name = "computerHours"
+            title="Today Computer Hours"
             progress="0.30"
-            increase="+5%"
-            icon={
-              <PersonAddIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            value={computerHour}
           />
         </Box>
         {/* ROW 2 */}

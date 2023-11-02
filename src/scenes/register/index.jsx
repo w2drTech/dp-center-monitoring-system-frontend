@@ -48,13 +48,13 @@ const validationSchema = Yup.object().shape({
     "Invalid email format: Enter a valid specific email address"
   )
     .required("*Required field"),
-  name: Yup.string().required("Name is required"),
+  name: Yup.string().required("Name is required").trim(),
   center: Yup.string().required("Center name is required"),
-  phone: Yup.string().required("Phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx'),
-  guardianPhone: Yup.string().required("Guardian phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx'),
+  phone: Yup.string().required("Phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx').trim(),
+  guardianPhone: Yup.string().required("Guardian phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx').trim(),
   district: Yup.string().required("District is required"),
   province: Yup.string().required("Province is required"),
-  address: Yup.string().required("Address is required"),
+  address: Yup.string().required("Address is required").trim(),
 });
 const defaultTheme = createTheme();
 const Register = () => {

@@ -14,6 +14,8 @@ import Modal from "@mui/material/Modal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { IconButton } from "@mui/material";
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
 const studentAttendanceKey = "studentAttendanceKey";
 const studentNameKey = "studentName";
@@ -62,28 +64,35 @@ function Carousel({ images }) {
   let timeOut = null;
   const handleAttendanceMark = async () => {
     try {
-      const data = { email: email, pcId: pcId };
+      const data = { email: email.toLocaleLowerCase(), pcId: pcId.toLocaleLowerCase() };
       const response = await markAttendance(data);
       const attendanceKey = response.data.retunValue;
-      localStorage.setItem(studentAttendanceKey, attendanceKey);
-      localStorage.setItem(studentNameKey, studentName);
-      window.location = "/";
-    } catch (error) {
-      console.error("Error marking attendance:", error);
-      if (error.response) {
-        // Handle response errors (if any)
-        if (error.response.status >= 400 && error.response.status < 500) {
-          toast.warn("An error occurred. Please try again.");
-        } else {
-          toast.error("An unexpected server error occurred.");
-        }
-      } else if (error.request) {
-        // Handle request errors
-        toast.error("Request error. Please check your network connection.");
-      } else {
-        // Handle other errors
-        toast.error("An unexpected error occurred.");
+
+      if (response.data.o_sql_msg === "success") {
+        localStorage.setItem(studentAttendanceKey, attendanceKey);
+        localStorage.setItem(studentNameKey, studentName);
+        window.location = "/";
+      } else if (
+        response.data.o_sql_msg === "STUDENT ALREADY INSERTED LOGIN TIME"
+      ) {
+        toast.error("This user is already logged in");
       }
+    } catch (error) {
+      // console.error("Error marking attendance:", error);
+      // if (error.response) {
+      //   // Handle response errors (if any)
+      //   if (error.response.status >= 400 && error.response.status < 500) {
+      //     toast.warn("An error occurred. Please try again.");
+      //   } else {
+      //     toast.error("An unexpected server error occurred.");
+      //   }
+      // } else if (error.request) {
+      //   // Handle request errors
+      //   toast.error("Request error. Please check your network connection.");
+      // } else {
+      //   // Handle other errors
+      //   toast.error("An unexpected error occurred.");
+      // }
     }
   };
   useEffect(() => {
@@ -128,42 +137,43 @@ function Carousel({ images }) {
             >
               <img className="card_image" src={image.image} alt="" />
               <div className="card_overlay">
-                <a href="/login">
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    style={{
-                      top: 0,
-                      right: 180,
-                      position: "absolute",
-                      backgroundColor: "red",
-                      fontSize: "15px",
-                      marginBottom: "10px",
-                      margin: "10px",
-                      width: "100px",
-                    }}
-                  >
-                    Login
-                  </Button>
-                </a>
-                <a href="/register">
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    style={{
-                      top: 0,
-                      right: 0,
-                      position: "absolute",
-                      backgroundColor: "red",
-                      fontSize: "15px",
-                      marginBottom: "10px",
-                      margin: "10px",
-                      width: "160px",
-                    }}
-                  >
-                    Student Register
-                  </Button>
-                </a>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <a href="/register">
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      style={{
+                        top: 0,
+
+                        position: "absolute",
+                        backgroundColor: "red",
+                        fontSize: "15px",
+                        marginBottom: "10px",
+                        margin: "10px",
+                        width: "160px",
+                      }}
+                    >
+                      Student Register
+                    </Button>
+                  </a>
+                  <a href="/login">
+                    
+                      <IconButton
+                      
+                        aria-label="delete"
+                        variant="contained"
+                        type="submit"
+                        style={{
+                          top: 0,
+                          right: 0,
+                          position: "absolute",
+                        }}
+                        size="large"
+                      >
+                        <LoginOutlinedIcon fontSize="inherit" />
+                      </IconButton>
+                  </a>
+                </Box>
                 <Modal
                   open={open}
                   onClose={handleClose}
@@ -221,12 +231,13 @@ function Carousel({ images }) {
                 <Formik
                   onSubmit={async (values, { setSubmitting }) => {
                     setSubmitting(true);
-
+                    
                     try {
                       const response = await getStudent(values.email);
                       setStudentName(response.data.studentName);
                       setPcId(values.pcId);
                       setEmail(values.email);
+                      
                       handleOpen();
                     } catch (ex) {}
                   }}
@@ -250,7 +261,7 @@ function Carousel({ images }) {
                       >
                         <Typography
                           sx={{
-                            fontSize: "20px",
+                            fontSize: "25px",
                             textAlign: "center",
                             paddingTop: "15px",
                           }}
@@ -258,6 +269,7 @@ function Carousel({ images }) {
                           Attendance Marking Form
                         </Typography>
                         <TextField
+                          name="email"
                           fullWidth
                           variant="filled"
                           type="text"
@@ -265,7 +277,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.email}
-                          name="email"
+                          autoFocus ={false}
                           error={!!touched.email && !!errors.email}
                           helperText={touched.email && errors.email}
                           sx={{
@@ -277,6 +289,7 @@ function Carousel({ images }) {
                           }}
                         />
                         <TextField
+                          name="pcId"
                           fullWidth
                           variant="filled"
                           type="text"
@@ -284,7 +297,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.pcId}
-                          name="pcId"
+                          autoFocus ={false}
                           error={!!touched.pcId && !!errors.pcId}
                           helperText={touched.pcId && errors.pcId}
                           sx={{ padding: "10px" }}

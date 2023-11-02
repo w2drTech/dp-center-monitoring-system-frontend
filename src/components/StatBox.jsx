@@ -2,30 +2,28 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import ProgressCircle from "./ProgressCircle";
 
-const StatBox = ({ title, icon, progress, value }) => {
+const StatBox = ({ title, name, progress, value,fullStudentValue }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box width="100%" m="0 30px">
-      <Box display="flex" justifyContent="space-between">
-        <Box display="grid" alignItems="center" justifyContent="center">
+    <Box width="100%"  m="0 30px">
+      <Typography
+        variant="h5"
+        sx={{ color: colors.grey[100]}}
+        textAlign="center"
+      >
+        {title}
+      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" padding="5px">
+        <ProgressCircle progress={progress} />
+        <Typography
+          variant="h4"
+    
+          sx={{ color: colors.grey[100], paddingLeft:"5px" }}
+        >
+          {name === "computerHours" ? `${value} h`: `${value}/${fullStudentValue}`}
           
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            sx={{ color: colors.grey[100] }}
-          >
-            {title}
-          </Typography>
-          <ProgressCircle progress={progress} />
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            sx={{ color: colors.grey[100] }}
-          >
-            {title}
-          </Typography>
-        </Box>
+        </Typography>
       </Box>
     </Box>
   );

@@ -42,7 +42,7 @@ const HomeComponent = ({ images }) => {
         window.location = "/";
       }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
   const slideRight = () => {

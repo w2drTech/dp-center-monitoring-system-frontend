@@ -32,9 +32,9 @@ const initialValues = { email: "", password: "" };
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Email must be a valid one")
+    .email("Email must be a valid one").trim()
     .required("*Required field"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string().required("Password is required").trim(),
 });
 const defaultTheme = createTheme();
 
