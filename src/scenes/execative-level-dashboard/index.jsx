@@ -26,6 +26,7 @@ const ExecutiveLevelDashboard = () => {
         setComputerHours(response.data.dailyComputerHours)
         setAllRegisteredStudents(response.data.allStudentCount);
         setAllRegisteredCenters(response.data.allCenterCount);
+      
       } catch (error) {
         toast.error("Error fetching data");
       }
@@ -53,7 +54,7 @@ const ExecutiveLevelDashboard = () => {
           <StatBox
             name = "todayStudent"
             title="Today Students"
-            progress="0.85"
+            progress={`${(todayStudent/allRegisteredStudents)*100}`}
             value={todayStudent}
             fullStudentValue={allRegisteredStudents}
           />
@@ -68,7 +69,7 @@ const ExecutiveLevelDashboard = () => {
           <StatBox
           name = "liveStudent"
             title="Live Working Students"
-            progress="0.75"
+            progress={`${(workingStudent/allRegisteredStudents)*100}`}
             value={workingStudent}
             fullStudentValue={allRegisteredStudents}
           />
@@ -83,7 +84,7 @@ const ExecutiveLevelDashboard = () => {
           <StatBox
             name = "liveCenters"
             title="Live Working Centers"
-            progress="0.50"
+            progress={`${(workingCenters/allRegisteredCenters)*100}`}
             value={workingCenters}
             fullStudentValue={allRegisteredCenters}
           />
