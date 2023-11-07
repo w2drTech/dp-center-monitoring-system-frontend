@@ -26,21 +26,20 @@ const ExecutiveLevelDashboard = () => {
       try {
         const response = await getStatBoxData();
         const lineChartDataResponse = await getExecutiveDashboardLineChartData();
-        console.log(lineChartDataResponse);
         setTodayStudent(response.data.dailyStudentCount);
         setWorkingStudents(response.data.currentStudentCount);
         setWorkingCenters(response.data.dailyCenterCount);
         setComputerHours(response.data.dailyComputerHours)
         setAllRegisteredStudents(response.data.allStudentCount);
         setAllRegisteredCenters(response.data.allCenterCount);
-        const test =[
+        const chartData =[
           {
             id:"Total Student",
             color: tokens("dark").greenAccent[500],
             data: lineChartDataResponse.data
           }
         ]
-        setLineChartData(test);
+        setLineChartData(chartData);
       
       } catch (error) {
         toast.error("Error fetching data");

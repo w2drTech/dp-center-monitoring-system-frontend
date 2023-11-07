@@ -6,6 +6,7 @@ import { tokens } from "../theme";
 const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  console.log(data)
   return (
     <ResponsiveLine
       data={data}

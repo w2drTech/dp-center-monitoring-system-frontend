@@ -30,7 +30,6 @@ const validationSchema = yup.object().shape({
     .trim(),
   pcId: yup
     .string()
-    //.matches(phoneRegExp, "Phone number is not valid")
     .required("required"),
 });
 
