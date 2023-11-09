@@ -11,11 +11,9 @@ import studentAttendanceService, {
   markAttendance,
 } from "../../services/studentAttendanceService";
 import Modal from "@mui/material/Modal";
-import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { IconButton } from "@mui/material";
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 
 const studentAttendanceKey = "studentAttendanceKey";
 const studentNameKey = "studentName";
@@ -28,9 +26,7 @@ const validationSchema = yup.object().shape({
       "Invalid email format: Enter a valid specific email address"
     )
     .trim(),
-  pcId: yup
-    .string()
-    .required("required"),
+  pcId: yup.string().required("required"),
 });
 
 const initialValues = {
@@ -63,7 +59,10 @@ function Carousel({ images }) {
   let timeOut = null;
   const handleAttendanceMark = async () => {
     try {
-      const data = { email: email.toLocaleLowerCase(), pcId: pcId.toLocaleLowerCase() };
+      const data = {
+        email: email.toLocaleLowerCase(),
+        pcId: pcId.toLocaleUpperCase(),
+      };
       const response = await markAttendance(data);
       const attendanceKey = response.data.retunValue;
 
@@ -136,19 +135,18 @@ function Carousel({ images }) {
             >
               <img className="card_image" src={image.image} alt="" />
               <div className="card_overlay">
-                <Box display="flex" justifyContent="center" alignItems="center">
+                <Box display="flex">
                   <a href="/register">
                     <Button
                       variant="contained"
                       type="submit"
                       style={{
                         top: 0,
-
                         position: "absolute",
                         backgroundColor: "red",
                         fontSize: "15px",
                         marginBottom: "10px",
-                        margin: "10px",
+                        marginTop: "10px",
                         width: "160px",
                       }}
                     >
@@ -156,21 +154,19 @@ function Carousel({ images }) {
                     </Button>
                   </a>
                   <a href="/login">
-                    
-                      <IconButton
-                      
-                        aria-label="delete"
-                        variant="contained"
-                        type="submit"
-                        style={{
-                          top: 0,
-                          right: 0,
-                          position: "absolute",
-                        }}
-                        size="large"
-                      >
-                        <LoginOutlinedIcon fontSize="inherit" />
-                      </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      variant="contained"
+                      type="submit"
+                      style={{
+                        top: 0,
+                        right: 0,
+                        position: "absolute",
+                      }}
+                      size="large"
+                    >
+                      <LoginOutlinedIcon fontSize="inherit" />
+                    </IconButton>
                   </a>
                 </Box>
                 <Modal
@@ -230,13 +226,13 @@ function Carousel({ images }) {
                 <Formik
                   onSubmit={async (values, { setSubmitting }) => {
                     setSubmitting(true);
-                    
+
                     try {
                       const response = await getStudent(values.email);
                       setStudentName(response.data.studentName);
                       setPcId(values.pcId);
                       setEmail(values.email);
-                      
+
                       handleOpen();
                     } catch (ex) {}
                   }}
@@ -276,7 +272,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.email}
-                          autoFocus ={false}
+                          autoFocus={false}
                           error={!!touched.email && !!errors.email}
                           helperText={touched.email && errors.email}
                           sx={{
@@ -296,7 +292,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.pcId}
-                          autoFocus ={false}
+                          autoFocus={false}
                           error={!!touched.pcId && !!errors.pcId}
                           helperText={touched.pcId && errors.pcId}
                           sx={{ padding: "10px" }}

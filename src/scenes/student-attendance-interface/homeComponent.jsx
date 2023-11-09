@@ -39,6 +39,8 @@ const HomeComponent = ({ images }) => {
         window.location = "/";
       } else if (response.data.o_sql_msg === "STUDENT ALREADY LOGGED OUT") {
         toast.error("STUDENT ALREADY LOGGED OUT");
+        localStorage.removeItem("studentName");
+        localStorage.removeItem("studentAttendanceKey");
         window.location = "/";
       }
     } catch (error) {

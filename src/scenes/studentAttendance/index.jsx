@@ -14,6 +14,7 @@ import { getDistricts } from "../../services/districtService";
 import { getCenters } from "../../services/centerService";
 import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
 import "../../../src/style.css";
+import StatBox from "../../components/StatBox";
 
 const StudentAttendance = () => {
   const theme = useTheme();
@@ -90,7 +91,6 @@ const StudentAttendance = () => {
       if (selectedProvince) {
         try {
           const response = await getCenters(selectedDistrict); // You'll need a function to fetch districts based on the selected province
-          console.log(response);
           setCenters(response.data); // Assuming response is an array of districts
         } catch (error) {
           toast.error("Error fetching data");
@@ -214,10 +214,64 @@ const StudentAttendance = () => {
             </FormControl>
           </Box>
         </Box>
+      </Box>
+      <Box
+        display="grid"
+        justifyContent="space-between"
+        gridTemplateColumns="repeat(12, 1fr)"
+        gridAutoRows="140px"
+        gap="20px"
+        mt="10px"
+      >
+        {/* ROW 1 */}
+        <Box
+          gridColumn="span 1"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        ></Box>
+        <Box
+          gridColumn="span 5"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            name="todayStudent"
+            title="Today Students"
+            progress="0.75"
+            value="50"
+            fullStudentValue="100"
+            //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
+            //value={todayStudent}
+            //fullStudentValue={allRegisteredStudents}
+          />
+        </Box>
+        <Box
+          gridColumn="span 5"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            name="todayStudent"
+            title="Live Working Students"
+            progress="0.75"
+            //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
+            //value={todayStudent}
+            //fullStudentValue={allRegisteredStudents}
+          />
+        </Box>
+        <Box
+          gridColumn="span 1"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        ></Box>
         <Box
           gridColumn="span 12"
           height="380px"
-          gridRow="span 4"
+          gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
           <Box height="420px" m="-20px 0 0 0">
@@ -235,3 +289,64 @@ const StudentAttendance = () => {
 };
 
 export default StudentAttendance;
+/*        
+<Box
+gridColumn="span 3"
+backgroundColor={colors.primary[400]}
+display="flex"
+alignItems="center"
+justifyContent="center"
+>
+<StatBox
+  name="todayStudent"
+  title="Today Students"
+  progress="0.75"
+  //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
+ // value={todayStudent}
+ // fullStudentValue={allRegisteredStudents}
+/>
+</Box>
+<Box
+gridColumn="span 3"
+backgroundColor={colors.primary[400]}
+display="flex"
+alignItems="center"
+justifyContent="center"
+>
+<StatBox
+  name="liveStudent"
+  title="Live Working Students"
+  //progress={`${(workingStudent / allRegisteredStudents) * 100}`}
+  //value={workingStudent}
+  //fullStudentValue={allRegisteredStudents}
+/>
+</Box>
+<Box
+gridColumn="span 3"
+backgroundColor={colors.primary[400]}
+display="flex"
+alignItems="center"
+justifyContent="center"
+>
+<StatBox
+  name="liveCenters"
+  title="Live Working Centers"
+  //progress={`${(workingCenters / allRegisteredCenters) * 100}`}
+  //value={workingCenters}
+  //fullStudentValue={allRegisteredCenters}
+/>
+</Box>
+<Box
+gridColumn="span 3"
+backgroundColor={colors.primary[400]}
+display="flex"
+alignItems="center"
+justifyContent="center"
+>
+<StatBox
+  name="computerHours"
+  title="Today Computer Hours"
+  //progress="0.30"
+  //value={computerHour}
+/>
+</Box>*/

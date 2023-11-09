@@ -64,32 +64,6 @@ const Register = () => {
   const [centers, setCenters] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
-  //   const [centers, setCenters] = useState([]);
-
-  //     const [province, setProvince] = useState();
-  //     const [district, setDistrict] = useState();
-  //     const [center, setCenter] = useState();
-
-  //     const handleProvinceChange = (event) => {
-  //         console.log("test2")
-  //       setProvince(event.target.value);
-  //     };
-  //     const handleDistrictChange = (event) => {
-  //       setDistrict(event.target.value);
-  //     };
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const result = await getProvinces();
-  //         setProvinces(result);
-  //       } catch (error) {
-  //         console.error('Error fetching data:', error);
-  //       }
-  //     };
-
-  //     // Call the async function
-  //     fetchData();
-  //   }, []); // Empty dependency array to execute the effect only once
   useEffect(() => {
     const fetchProvinceData = async () => {
       try {
@@ -121,7 +95,6 @@ const Register = () => {
       if (selectedProvince) {
         try {
           const response = await getCenters(selectedDistrict); // You'll need a function to fetch districts based on the selected province
-          console.log(response);
           setCenters(response.data); // Assuming response is an array of districts
         } catch (error) {
           toast.error("Error fetching data");
@@ -131,9 +104,6 @@ const Register = () => {
 
     fetchCenterData();
   }, [selectedDistrict]);
-  const handleFormSubmit = (values) => {
-    console.log("asda");
-  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -176,7 +146,6 @@ const Register = () => {
                 try {
                   const response = await registerStudent(values);
                   if (response.data.o_sql_msg === "success") {
-                    console.log("Success");
                     toast.success(
                       "You are successfully registered for DP education"
                     );
@@ -212,7 +181,7 @@ const Register = () => {
                       autoFocus
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.email}
+                      value={values.email.toLocaleLowerCase()}
                       error={!!touched.email && !!errors.email}
                       helperText={touched.email && errors.email}
                     />
