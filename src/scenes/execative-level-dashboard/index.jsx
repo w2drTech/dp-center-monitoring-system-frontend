@@ -25,6 +25,7 @@ const ExecutiveLevelDashboard = () => {
     const fetchStatBoxData = async () => {
       try {
         const response = await getStatBoxData();
+        console.log(response.data)
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
         setTodayStudent(response.data.dailyStudentCount);
@@ -46,13 +47,16 @@ const ExecutiveLevelDashboard = () => {
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
+    console.log(loading)
   }, []);
-  if (loading) {
-    return <div id="cover-spin"></div>;
-  }
+  // if (loading) {
+  //   console.log(loading);
+  //   return <div id="cover-spin"></div>;
+  // }
   return (
     <Box m="0 20px">
       {/* GRID & CHARTS */}
+      {loading === false ?
       <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
@@ -112,6 +116,7 @@ const ExecutiveLevelDashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
+
           <StatBox
             name="computerHours"
             title="Today Computer Hours"
@@ -135,6 +140,7 @@ const ExecutiveLevelDashboard = () => {
           </Box>
         </Box>
       </Box>
+      :<div id="cover-spin"></div>}
     </Box>
   );
 };

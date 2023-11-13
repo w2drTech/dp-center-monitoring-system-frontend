@@ -26,7 +26,13 @@ const validationSchema = yup.object().shape({
       "Invalid email format: Enter a valid specific email address"
     )
     .trim(),
-  pcId: yup.string().required("required"),
+  pcId: yup
+    .string()
+    .required("required")
+    .matches(
+      /^.{7}$/,
+      "Invalid PC Id format: Enter a valid specific PC Id (ex:PC50101)"
+    ),
 });
 
 const initialValues = {
@@ -93,13 +99,13 @@ function Carousel({ images }) {
       // }
     }
   };
-  useEffect(() => {
-    timeOut =
-      autoPlay &&
-      setTimeout(() => {
-        slideRight();
-      }, 10000000);
-  });
+  // useEffect(() => {
+  //   timeOut =
+  //     autoPlay &&
+  //     setTimeout(() => {
+  //       slideRight();
+  //     }, 10000000);
+  // });
 
   const slideRight = () => {
     setCurrent(current === images.length - 1 ? 0 : current + 1);
@@ -147,7 +153,7 @@ function Carousel({ images }) {
                         fontSize: "15px",
                         marginBottom: "10px",
                         marginTop: "10px",
-                        width: "160px",
+                        width: "165px",
                       }}
                     >
                       Student Register
