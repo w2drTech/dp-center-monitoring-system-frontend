@@ -3,10 +3,10 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
 
-const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) => {
+const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName,area }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  console.log(data)
+
   return (
     <ResponsiveLine
       data={data}
@@ -36,13 +36,15 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) =>
         legends: {
           text: {
             fill: colors.grey[100],
+            fontSize:"13px"
           },
         },
-   
+        
         tooltip: {
           container: {
             color: colors.primary[500],
           },
+          chip: {},
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
@@ -52,7 +54,7 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) =>
         type: "linear",
         min: "auto",
         max: "auto",
-        stacked: true,
+        stacked: false,
         reverse: false,
       }}
       yFormat=" >-.2f"
@@ -78,7 +80,9 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) =>
         legendOffset: -30,
         legendPosition: "middle",
       }}
+      lineWidth={3}
       enableGridX={false}
+      enableSlices={"x"}
       enableGridY={false}
       pointSize={8}
       pointColor={{ theme: "background" }}
@@ -87,17 +91,17 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName }) =>
       pointLabel={"y"}
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
-      enableArea={true}
+      enableArea={area}
       areaBaselineValue={1}
       useMesh={true}
       legends={[
         {
-          anchor: "bottom-right",
+          anchor: "top-right",
           direction: "column",
           justify: false,
-          translateX: 100,
+          translateX: 80,
           translateY: 0,
-          itemsSpacing: 0,
+          itemsSpacing: 3,
           itemDirection: "left-to-right",
           itemWidth: 80,
           itemHeight: 20,

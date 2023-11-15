@@ -15,6 +15,11 @@ import { getCenters } from "../../services/centerService";
 import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
 import "../../../src/style.css";
 import StatBox from "../../components/StatBox";
+import getDistrictAttendance, {
+  getSelectedDistrictAttendance,
+  getSelectedDistrictAttendanceForCircle,
+} from "../../services/getDistrictAttendance";
+import { getStatBoxData } from "../../services/statboxDataService";
 
 const StudentAttendance = () => {
   const theme = useTheme();
@@ -31,10 +36,48 @@ const StudentAttendance = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   var [loading, setLoading] = useState(true);
   const [lineChartData, setLineChartData] = useState([]);
+  const [allStudents, setAllStudents] = useState("");
+  const [todayStudents, setTodayStudents] = useState("");
+  const [currentStudents, setCurrentStudents] = useState("");
 
-  const handleProvinceChange = (event) => {
-    console.log(event.target.value);
+  const handleProvinceChange = async (event) => {
     setProvince(event.target.value);
+
+    const responseOfCircleData = await getSelectedDistrictAttendanceForCircle(
+      event.target.value
+    );
+
+    setAllStudents(responseOfCircleData.data.allStudentCount);
+    setTodayStudents(responseOfCircleData.data.todayStudentCount);
+    setCurrentStudents(responseOfCircleData.data.currentStudentCount);
+    const response = await getSelectedDistrictAttendance(event.target.value);
+    const districtArrays = {};
+    const districtColors = {
+      COLOMBO: tokens("dark").greenAccent[500],
+      GAMPAHA: tokens("dark").blueAccent[500],
+      KALUTARA: tokens("dark").redAccent[500],
+      // Add more districts and colors as needed
+    };
+    response.data.forEach((item) => {
+      const district = item.district;
+
+      if (!districtArrays[district]) {
+        districtArrays[district] = {
+          id: district.toLowerCase(), // Convert district name to lowercase for the id
+          color: tokens("dark").greenAccent[500], // Function to get a random HSL color
+          data: [],
+        };
+      } // Push the current item to the corresponding district array
+      districtArrays[district].data.push({
+        x: item.date,
+        y: item.studentCount,
+      });
+    });
+
+    // Convert the object to an array of values
+    const resultArray = Object.values(districtArrays);
+
+    setLineChartData(resultArray);
   };
   const handleDistrictChange = (event) => {
     setDistrict(event.target.value);
@@ -45,15 +88,21 @@ const StudentAttendance = () => {
   useEffect(() => {
     const fetchLineChartData = async () => {
       try {
+        const response = await getStatBoxData();
+        setAllStudents(response.data.allStudentCount);
+        setTodayStudents(response.data.dailyStudentCount);
+        setCurrentStudents(response.data.currentStudentCount);
+
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
         const chartData = [
           {
-            id: "Total Student",
+            id: "Total Students",
             color: tokens("dark").greenAccent[500],
             data: lineChartDataResponse.data,
           },
         ];
+
         setLineChartData(chartData);
       } catch (error) {
         toast.error("Error fetching data");
@@ -239,12 +288,9 @@ const StudentAttendance = () => {
           <StatBox
             name="todayStudent"
             title="Today Students"
-            progress="0.75"
-            value="50"
-            fullStudentValue="100"
-            //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
-            //value={todayStudent}
-            //fullStudentValue={allRegisteredStudents}
+            progress={`${(todayStudents / allStudents) * 100 || 0.0}`}
+            value={todayStudents}
+            fullStudentValue={allStudents}
           />
         </Box>
         <Box
@@ -256,10 +302,9 @@ const StudentAttendance = () => {
           <StatBox
             name="todayStudent"
             title="Live Working Students"
-            progress="0.75"
-            //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
-            //value={todayStudent}
-            //fullStudentValue={allRegisteredStudents}
+            progress={`${(currentStudents / todayStudents) * 100 || 0.0}`}
+            value={currentStudents}
+            fullStudentValue={todayStudents}
           />
         </Box>
         <Box
@@ -270,16 +315,17 @@ const StudentAttendance = () => {
         ></Box>
         <Box
           gridColumn="span 12"
-          height="380px"
+          height="490px"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
-          <Box height="420px" m="-20px 0 0 0">
+          <Box height="520px" m="-20px 0 0 0">
             <LineChart
               isDashboard={true}
               data={lineChartData}
               leftAxisName="Student Count"
               bottomAxisName="Date"
+              area={false}
             />
           </Box>
         </Box>

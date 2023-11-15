@@ -28,6 +28,5 @@ const provinces = [
 	},
 ]
 export function getProvinces() {
-    console.log("test")
     return provinces;
   }

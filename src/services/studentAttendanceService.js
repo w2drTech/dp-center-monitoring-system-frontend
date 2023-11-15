@@ -10,7 +10,7 @@ export function getStudent(email) {
   return http.get(`${apiEndPointForGetStudent}/${email}`);
 }
 export function registerStudent(student) {
-  console.log(student);
+
   return http.post(apiEndpointForInsert, {
     studentName: student.name,
     email: student.email,
@@ -21,7 +21,7 @@ export function registerStudent(student) {
   });
 }
 export function markAttendance(attendance) {
-  console.log(attendance)
+
 
   return http.post(apiEndPointForMarkAttendance, {
     email: attendance.email,

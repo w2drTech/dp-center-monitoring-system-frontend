@@ -80,7 +80,7 @@ const Register = () => {
       if (selectedProvince) {
         try {
           const response = await getDistricts(selectedProvince); // You'll need a function to fetch districts based on the selected province
-          console.log(response);
+    
           setDistricts(response.data); // Assuming response is an array of districts
         } catch (error) {
           toast.error("Error fetching data");
@@ -142,7 +142,6 @@ const Register = () => {
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
-                console.log(values);
                 try {
                   const response = await registerStudent(values);
                   if (response.data.o_sql_msg === "success") {

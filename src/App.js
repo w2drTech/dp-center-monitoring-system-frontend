@@ -24,7 +24,7 @@ import Notfound from "./scenes/NotFound/Notfound";
 function App() {
   const [theme, colorMode] = useMode();
   const images = [
-    "../../assets/1.jpg",
+    "../../assets/bg.jpg",
     "../../assets/2.jpg",
     "../../assets/3.jpg",
     // Add more image URLs as needed

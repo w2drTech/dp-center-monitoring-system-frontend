@@ -41,7 +41,7 @@ const defaultTheme = createTheme();
 export default function SignInSide() {
   const navigate = useNavigate();
   const handleFormSubmit = (values) => {
-    console.log("asda" + values.password);
+ 
     window.location.href = 'dashboard/executive'; 
   };
 

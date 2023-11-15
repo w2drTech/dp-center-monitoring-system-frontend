@@ -4,6 +4,7 @@ import ProgressCircle from "./ProgressCircle";
 
 const StatBox = ({ title, name, progress, value,fullStudentValue }) => {
   const theme = useTheme();
+  console.log(progress)
   const colors = tokens(theme.palette.mode);
   return (
     <Box width="100%"  m="0 30px">
@@ -21,7 +22,7 @@ const StatBox = ({ title, name, progress, value,fullStudentValue }) => {
     
           sx={{ color: colors.grey[100], paddingLeft:"5px" }}
         >
-          {name === "computerHours" ? `${value} h`: `${value}/${fullStudentValue}`}
+          {`${value}/${fullStudentValue}`}
           
         </Typography>
       </Box>

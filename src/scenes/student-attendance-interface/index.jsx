@@ -153,7 +153,7 @@ function Carousel({ images }) {
                         fontSize: "15px",
                         marginBottom: "10px",
                         marginTop: "10px",
-                        width: "165px",
+                        width: "170px",
                       }}
                     >
                       Student Register
@@ -257,8 +257,9 @@ function Carousel({ images }) {
                       <Box
                         display="-ms-flexbox"
                         alignItems="center"
+                        marginTop="250px"
                         justifyContent="center"
-                        sx={{ backgroundColor: "rgba(211, 205, 208, 0.36)" }}
+                        sx={{ backgroundColor: "rgba(211, 205, 208, 0.353)" }}
                       >
                         <Typography
                           sx={{
@@ -278,7 +279,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.email}
-                          autoFocus={false}
+                          autoFocus={false} 
                           error={!!touched.email && !!errors.email}
                           helperText={touched.email && errors.email}
                           sx={{

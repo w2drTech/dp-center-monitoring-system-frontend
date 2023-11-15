@@ -25,7 +25,7 @@ const ExecutiveLevelDashboard = () => {
     const fetchStatBoxData = async () => {
       try {
         const response = await getStatBoxData();
-        console.log(response.data)
+   
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
         setTodayStudent(response.data.dailyStudentCount);
@@ -36,9 +36,9 @@ const ExecutiveLevelDashboard = () => {
         setAllRegisteredCenters(response.data.allCenterCount);
         const chartData = [
           {
-            id: "Total Student",
+            id: "Total Students",
             color: tokens("dark").greenAccent[500],
-            data: lineChartDataResponse.data,
+            data: lineChartDataResponse.data
           },
         ];
         setLineChartData(chartData);
@@ -47,7 +47,7 @@ const ExecutiveLevelDashboard = () => {
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
-    console.log(loading)
+    console.log(loading);
   }, []);
   // if (loading) {
   //   console.log(loading);
@@ -56,91 +56,95 @@ const ExecutiveLevelDashboard = () => {
   return (
     <Box m="0 20px">
       {/* GRID & CHARTS */}
-      {loading === false ?
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="140px"
-        gap="20px"
-      >
-        {/* ROW 1 */}
+      {loading === false ? (
         <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gridAutoRows="140px"
+          gap="20px"
         >
-          <StatBox
-            name="todayStudent"
-            title="Today Students"
-            progress={`${(todayStudent / allRegisteredStudents) * 100}`}
-            value={todayStudent}
-            fullStudentValue={allRegisteredStudents}
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            name="liveStudent"
-            title="Live Working Students"
-            progress={`${(workingStudent / allRegisteredStudents) * 100}`}
-            value={workingStudent}
-            fullStudentValue={allRegisteredStudents}
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            name="liveCenters"
-            title="Live Working Centers"
-            progress={`${(workingCenters / allRegisteredCenters) * 100}`}
-            value={workingCenters}
-            fullStudentValue={allRegisteredCenters}
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-
-          <StatBox
-            name="computerHours"
-            title="Today Computer Hours"
-            progress="0.30"
-            value={computerHour}
-          />
-        </Box>
-        {/* ROW 2 */}
-        <Box
-          gridColumn="span 12"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Box height="350px" m="-20px 0 0 0">
-            <LineChart
-              isDashboard={true}
-              data={lineChartData}
-              leftAxisName="Student Count"
-              bottomAxisName="Date"
+          {/* ROW 1 */}
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <StatBox
+              name="todayStudent"
+              title="Today Students"
+              progress={`${(todayStudent / allRegisteredStudents) * 100}`}
+              value={todayStudent}
+              fullStudentValue={allRegisteredStudents}
             />
           </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <StatBox
+              name="liveStudent"
+              title="Live Working PCs"
+              progress={`${(workingStudent / allRegisteredStudents) * 100}`}
+              value={workingStudent}
+              fullStudentValue={allRegisteredStudents}
+            />
+          </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <StatBox
+              name="liveCenters"
+              title="Live Working Centers"
+              progress={`${(workingCenters / allRegisteredCenters) * 100}`}
+              value={workingCenters}
+              fullStudentValue={allRegisteredCenters}
+            />
+          </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box>
+              <Typography variant="h5" padding={"10px"}>
+                Computer Hours : {`${computerHour} h`}
+              </Typography>
+              <Typography variant="h5"  padding={"10px"}>
+                Working Students : {`${workingStudent} / ${todayStudent}`}
+              </Typography>
+            </Box>
+          </Box>
+          {/* ROW 2 */}
+          <Box
+            gridColumn="span 12"
+            gridRow="span 2"
+            backgroundColor={colors.primary[400]}
+          >
+            <Box height="350px" m="-20px 0 0 0">
+              <LineChart
+                isDashboard={true}
+                data={lineChartData}
+                leftAxisName="Student Count"
+                bottomAxisName="Date"
+                area={true}
+              />
+            </Box>
+          </Box>
         </Box>
-      </Box>
-      :<div id="cover-spin"></div>}
+      ) : (
+        <div id="cover-spin"></div>
+      )}
     </Box>
   );
 };
