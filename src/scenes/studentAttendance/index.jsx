@@ -15,11 +15,12 @@ import { getCenters } from "../../services/centerService";
 import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
 import "../../../src/style.css";
 import StatBox from "../../components/StatBox";
-import getDistrictAttendance, {
-  getSelectedDistrictAttendance,
-  getSelectedDistrictAttendanceForCircle,
+import {
+  getSelectedProvinceAttendance,
+  getSelectedProvinceAttendanceForCircle,
 } from "../../services/getDistrictAttendance";
 import { getStatBoxData } from "../../services/statboxDataService";
+import { getSelectedDistrictAttendance } from "../../services/getCenterAttendanceForSelectedDistrict";
 
 const StudentAttendance = () => {
   const theme = useTheme();
@@ -43,14 +44,13 @@ const StudentAttendance = () => {
   const handleProvinceChange = async (event) => {
     setProvince(event.target.value);
 
-    const responseOfCircleData = await getSelectedDistrictAttendanceForCircle(
+    const responseOfCircleData = await getSelectedProvinceAttendanceForCircle(
       event.target.value
     );
-
     setAllStudents(responseOfCircleData.data.allStudentCount);
     setTodayStudents(responseOfCircleData.data.todayStudentCount);
     setCurrentStudents(responseOfCircleData.data.currentStudentCount);
-    const response = await getSelectedDistrictAttendance(event.target.value);
+    const response = await getSelectedProvinceAttendance(event.target.value);
     const districtArrays = {};
     const districtColors = {
       COLOMBO: tokens("dark").greenAccent[500],
@@ -73,14 +73,38 @@ const StudentAttendance = () => {
         y: item.studentCount,
       });
     });
-
     // Convert the object to an array of values
     const resultArray = Object.values(districtArrays);
-
     setLineChartData(resultArray);
   };
-  const handleDistrictChange = (event) => {
+  const handleDistrictChange = async (event) => {
     setDistrict(event.target.value);
+    const response = await getSelectedDistrictAttendance(event.target.value);
+    const centersArray = {};
+    const districtColors = {
+      COLOMBO: tokens("dark").greenAccent[500],
+      GAMPAHA: tokens("dark").blueAccent[500],
+      KALUTARA: tokens("dark").redAccent[500],
+      // Add more districts and colors as needed
+    };
+    response.data.forEach((item) => {
+      const center = item.centerName;
+
+      if (!centersArray[center]) {
+        centersArray[center] = {
+          id: center.toLowerCase(), // Convert center name to lowercase for the id
+          color: tokens("dark").greenAccent[500], // Function to get a random HSL color
+          data: [],
+        };
+      } // Push the current item to the corresponding center array
+      centersArray[center].data.push({
+        x: item.date,
+        y: item.studentCount,
+      });
+    });
+    // Convert the object to an array of values
+    const resultArray = Object.values(centersArray);
+    setLineChartData(resultArray);
   };
   const handleCenterChange = (event) => {
     setCenter(event.target.value);
