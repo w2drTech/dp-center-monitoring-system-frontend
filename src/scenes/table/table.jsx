@@ -10,30 +10,21 @@ const TopPerformance = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", headerName: "Center ID" },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Center Name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
       field: "age",
-      headerName: "Age",
+      headerName: "Performance",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    }
+
   ];
 
   return (
@@ -70,7 +61,7 @@ const TopPerformance = () => {
         }}
       >
         <DataGrid
-          rows={mockDataTeam}
+          rows={""}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
