@@ -20,6 +20,8 @@ const ExecutiveLevelDashboard = () => {
   const [workingCenters, setWorkingCenters] = useState("");
   const [computerHour, setComputerHours] = useState("");
   const [lineChartData, setLineChartData] = useState("");
+  const [allPcs, setAllPCCount] = useState("");
+  const [todayPCs, setTodayPCCount] = useState("");
   var [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchStatBoxData = async () => {
@@ -34,6 +36,8 @@ const ExecutiveLevelDashboard = () => {
         setComputerHours(response.data.dailyComputerHours);
         setAllRegisteredStudents(response.data.allStudentCount);
         setAllRegisteredCenters(response.data.allCenterCount);
+        setAllPCCount(response.data.allPCsCount);
+        setTodayPCCount(response.data.dailyPCsCount);
         const chartData = [
           {
             id: "Total Students",
@@ -88,10 +92,10 @@ const ExecutiveLevelDashboard = () => {
           >
             <StatBox
               name="liveStudent"
-              title="Live Working PCs"
-              progress={`${(workingStudent / allRegisteredStudents) * 100}`}
-              value={workingStudent}
-              fullStudentValue={allRegisteredStudents}
+              title="Today PCs"
+              progress={`${(todayPCs / allPcs) * 100}`}
+              value={todayPCs}
+              fullStudentValue={allPcs}
             />
           </Box>
           <Box

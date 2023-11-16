@@ -143,6 +143,7 @@ const Register = () => {
               onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
                 try {
+                  console.log()
                   const response = await registerStudent(values);
                   if (response.data.o_sql_msg === "success") {
                     toast.success(

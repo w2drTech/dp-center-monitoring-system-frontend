@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
     .string()
     .required("required")
     .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
       "Invalid email format: Enter a valid specific email address"
     )
     .trim(),
@@ -32,7 +32,8 @@ const validationSchema = yup.object().shape({
     .matches(
       /^.{7}$/,
       "Invalid PC Id format: Enter a valid specific PC Id (ex:PC50101)"
-    ),
+    )
+    .trim(),
 });
 
 const initialValues = {
@@ -66,11 +67,12 @@ function Carousel({ images }) {
   const handleAttendanceMark = async () => {
     try {
       const data = {
-        email: email.toLocaleLowerCase(),
+        email: email.toLowerCase(),
         pcId: pcId.toLocaleUpperCase(),
       };
       const response = await markAttendance(data);
       const attendanceKey = response.data.retunValue;
+      console.log(response);
 
       if (response.data.o_sql_msg === "success") {
         localStorage.setItem(studentAttendanceKey, attendanceKey);
@@ -80,6 +82,11 @@ function Carousel({ images }) {
         response.data.o_sql_msg === "STUDENT ALREADY INSERTED LOGIN TIME"
       ) {
         toast.error("This user is already logged in");
+      }
+      else if (
+        response.data.o_sql_msg === "INVALID PC CODE"
+      ) {
+        toast.error("Error: Invalid PC ID. Please check PC ID and try again.");
       }
     } catch (error) {
       // console.error("Error marking attendance:", error);
@@ -235,12 +242,19 @@ function Carousel({ images }) {
 
                     try {
                       const response = await getStudent(values.email);
+                      console.log(response);
                       setStudentName(response.data.studentName);
                       setPcId(values.pcId);
                       setEmail(values.email);
-
-                      handleOpen();
-                    } catch (ex) {}
+                      if (response.data.sql_msg === "SUCCESS") {
+                        handleOpen();
+                      }
+                      else{
+                        toast.error("Error: Invalid email. Please check your credentials and try again.")
+                      }
+                    } catch (ex) {
+                      console.log(ex);
+                    }
                   }}
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -279,7 +293,7 @@ function Carousel({ images }) {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.email}
-                          autoFocus={false} 
+                          autoFocus={false}
                           error={!!touched.email && !!errors.email}
                           helperText={touched.email && errors.email}
                           sx={{
