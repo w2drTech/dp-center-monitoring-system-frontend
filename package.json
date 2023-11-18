@@ -1,7 +1,15 @@
 {
   "name": "dp-center-monitoring-system",
   "version": "0.1.0",
-  "private": true,
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+   
+      "@babel/plugin-proposal-private-property-in-object"
+    ]
+  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
