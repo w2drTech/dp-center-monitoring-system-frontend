@@ -246,6 +246,8 @@ function Carousel({ images }) {
                       setStudentName(response.data.studentName);
                       setPcId(values.pcId);
                       setEmail(values.email);
+
+                         
                       if (response.data.sql_msg === "SUCCESS") {
                         handleOpen();
                       }

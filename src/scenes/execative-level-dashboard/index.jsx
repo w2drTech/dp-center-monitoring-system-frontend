@@ -46,7 +46,7 @@ const ExecutiveLevelDashboard = () => {
           },
         ];
         setLineChartData(chartData);
-      } catch (error) {
+      } catch (error) { 
         toast.error("Error fetching data");
       }
     };

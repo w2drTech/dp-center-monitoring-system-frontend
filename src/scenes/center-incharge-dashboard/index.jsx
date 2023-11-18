@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import Header from "../../components/Header";
 
-const Dashboard = () => {
+const CenterInchargeDashboard = () => {
   return (
     <Box >
-      
+      Center Incharge
     </Box>
   );
 };
 
-export default Dashboard;
+export default CenterInchargeDashboard;

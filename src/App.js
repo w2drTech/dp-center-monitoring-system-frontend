@@ -49,7 +49,6 @@ function App() {
               <Route path="/dashboard" element={<DashboardLayout />}>
                 <Route
                   path="executive"
-                  exact
                   element={<ExecutiveLevelDashboard />}
                 />
                 <Route
@@ -61,11 +60,6 @@ function App() {
               <Route path="*" element={<Notfound/>}/>
             </Routes>
           </main>
-          {/* <SignInSide />
-           */}
-          {/* <Carousel images={countries} /> */}
-          {/* <HomeComponent images={countries} />  */}
-          {/* <Register/> */}
         </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
