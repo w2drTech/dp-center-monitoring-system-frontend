@@ -16,6 +16,9 @@ import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
+import { login } from "../../services/authService";
+import { toast } from "react-toastify";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -41,15 +44,21 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const navigate = useNavigate();
-  const handleFormSubmit = (values) => {
-    localStorage.setItem("Role", "executive");
-    const Rolevalue = localStorage.getItem("Role");
-    if (Rolevalue === "executive") {
-      window.location.href = "dashboard/executive2";
-    }
-    if(Rolevalue === "staff")
-    {
-      window.location.href = "staff-dashboard/center-manager";
+  const handleFormSubmit = async (values) => {
+    try {
+      const response = await login(values.email, values.password);
+      console.log(response);
+      localStorage.setItem("Role", response.data.userType);
+      // const Rolevalue = localStorage.getItem("Role");
+      if (response.data.userType === "ADM") {
+        window.location.href = "dashboard/executive2";
+      }
+      // if(Rolevalue === "staff")
+      // {
+      //   window.location.href = "staff-dashboard/center-manager";
+      // }
+    } catch (error) {
+      toast.error("Invalid username or password");
     }
   };
 

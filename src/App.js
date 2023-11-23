@@ -61,7 +61,7 @@ console.log(process.env)
               <Route
                 element={
                   <ProtectedRoute
-                    isAllowed={!!user && user.roles.includes("executive")}
+                    isAllowed={!!user && user.roles.includes("ADM")}
                   />
                 }
               >
