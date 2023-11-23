@@ -9,6 +9,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { LogoutOutlined } from "@mui/icons-material";
 import Header from "../../components/Header";
+import { Link } from "react-router-dom";
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -32,8 +33,12 @@ const Topbar = () => {
         <IconButton>
           <PersonOutlinedIcon />
         </IconButton>
-        <IconButton>
-          <LogoutOutlined />
+        <IconButton
+        // onClick={
+        //   localStorage.removeItem("Role")
+        // }
+        >
+          <Link to="/" style={{textDecoration:"none", color: "inherit"}}><LogoutOutlined /></Link>
         </IconButton>
       </Box>
     </Box>

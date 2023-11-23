@@ -83,7 +83,7 @@ const SidebarComponent = ({ menuItems }) => {
                 <Typography variant="h3" color={colors.grey[100]}>
                   Dashboard
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)} >
                   <MenuOutlinedIcon />
                 </IconButton>
               </Box>

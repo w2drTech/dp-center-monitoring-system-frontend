@@ -12,74 +12,74 @@ import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
 import FileOpenOutlinedIcon from "@mui/icons-material/FileOpenOutlined";
 import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import Notfound from "../scenes/NotFound/Notfound";
-import { useState } from "react";
-
+import CenterInchargeDashboard from "../scenes/center-incharge-dashboard";
+import LineChart from "../components/LineChart";
+import Test from "./Test";
+import ViewAllStudents from "../scenes/center-incharge-dashboard/view-all-students";
+const status = "Start";
 const menuItems = [
   {
     title: "Dashboard",
-    to: "executive2",
+    to: "center-manager",
     icon: <HomeOutlinedIcon />,
   },
   {
-    title: "Center Details",
-    icon: <SchoolOutlinedIcon />,
+    title: "All Students",
+    to: "view-all",
+    icon: <HomeOutlinedIcon />,
+  },
+  {
+    title: "PC Data",
+    to: "view-all",
+    icon: <HomeOutlinedIcon />,
+  },
+  {
+    title: "Daily Data",
+    icon: <HomeOutlinedIcon />,
     subItems: [
       {
-        title: "Student Attendance Details",
-        to: "student-attendance",
-        icon: <HowToRegOutlinedIcon />,
-      },
-      {
-        title: "PC Work Hours Details",
+        title: "Today Students",
         to: "/menu-5",
-        icon: <ComputerOutlinedIcon />,
+        icon: <HomeOutlinedIcon />,
       },
+    
     ],
   },
   {
-    title: "Project Wise Details",
-    icon: <ChecklistRtlOutlinedIcon />,
-    subItems: [
-      {
-        title: "Opened Projects",
-        to: "/menu-5",
-        icon: <FileOpenOutlinedIcon />,
-      },
-      {
-        title: "Completed Projects",
-        to: "/menu-5",
-        icon: <RuleOutlinedIcon />,
-      },
-    ],
+    title: "Upload Files",
+    to: "/menu-2",
+    icon: <HomeOutlinedIcon />,
   },
   {
-    title: "Top Performance Centers",
-    to: "top-performance",
-    icon: <TrendingUpOutlinedIcon />,
+    title: `${status} The Center`,
+    onclick:()=>{status="End"},
+    icon: <AlarmOnIcon />,
   },
 ];
-
-const DashboardLayout = () => {
+const CenterManagerDashboardLayout = () => { 
   return (
     <div className="app">
-      <SidebarComponent menuItems={menuItems} />
+      <SidebarComponent
+        menuItems={ menuItems}
+      />
       <main className="content">
         <Topbar />
 
         <Routes>
           <Route
-            path="/executive2"
+            path="/center-manager"
             exact
-            element={<ExecutiveLevelDashboard />}
+            element={<CenterInchargeDashboard />}
           />
-          <Route path="/student-attendance" element={<StudentAttendance />} />
-          <Route path="/top-performance" element={<TopPerformance />} />
-          <Route path="*" element={<Notfound />} />
+          <Route path="/view-all" element={<ViewAllStudents />} />
+
+          <Route path="*" element={<Notfound/>}/>
         </Routes>
       </main>
     </div>
   );
 };
 
-export default DashboardLayout;
+export default CenterManagerDashboardLayout;

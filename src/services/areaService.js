@@ -1,7 +1,7 @@
 import http from './httpService';
-import apiConfig from '../utils/config.json';
 
-const apiEndPoint = `${apiConfig.apiUrl}students/get/provinces`;
+const apiUrl = process.env.REACT_APP_API_URL;
+const apiEndPoint = `${process.env.REACT_APP_API_URL}students/get/provinces`;
 
 export function getProvinces()
 {

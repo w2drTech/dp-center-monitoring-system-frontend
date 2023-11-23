@@ -32,7 +32,8 @@ const initialValues = { email: "", password: "" };
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Email must be a valid one").trim()
+    .email("Email must be a valid one")
+    .trim()
     .required("*Required field"),
   password: Yup.string().required("Password is required").trim(),
 });
@@ -41,8 +42,15 @@ const defaultTheme = createTheme();
 export default function SignInSide() {
   const navigate = useNavigate();
   const handleFormSubmit = (values) => {
- 
-    window.location.href = 'dashboard/executive'; 
+    localStorage.setItem("Role", "executive");
+    const Rolevalue = localStorage.getItem("Role");
+    if (Rolevalue === "executive") {
+      window.location.href = "dashboard/executive2";
+    }
+    if(Rolevalue === "staff")
+    {
+      window.location.href = "staff-dashboard/center-manager";
+    }
   };
 
   return (

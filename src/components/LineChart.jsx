@@ -1,9 +1,31 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
+import { useEffect, useState } from "react";
 
+const LineChart = ({
+  data,
+  isDashboard = false,
+  leftAxisName,
+  bottomAxisName,
+  area,
+}) => {
+  const [y, setY] = useState("");
+  const [m, setM] = useState("");
+  useEffect(() => {
+    var months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+    var currentDate = new Date();
 
-const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName,area }) => {
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth(); // Months are zero-based, so add 1
+    var monthName = months[month];
+    setY(year);
+    setM(monthName);
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -32,19 +54,18 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName,area 
             },
           },
         },
-    
+
         legends: {
           text: {
             fill: colors.grey[100],
-            fontSize:"13px"
+            fontSize: "13px",
           },
         },
-        
+
         tooltip: {
           container: {
             color: colors.primary[500],
           },
-          chip: {},
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
@@ -64,9 +85,9 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName,area 
       axisBottom={{
         orient: "bottom",
         tickSize: 0,
-        tickPadding: 8,
+        tickPadding: 5,
         tickRotation: 0,
-        legend: bottomAxisName, // added
+        legend:`${bottomAxisName} (${m} - ${y})`, // added
         legendOffset: 26,
         legendPosition: "middle",
       }}
@@ -93,16 +114,17 @@ const LineChart = ({ data, isDashboard = false,leftAxisName,bottomAxisName,area 
       pointLabelYOffset={-12}
       enableArea={area}
       areaBaselineValue={1}
+      motionConfig={"molasses"}
       useMesh={true}
       legends={[
         {
           anchor: "top-right",
           direction: "column",
           justify: false,
-          translateX: 0,
+          translateX: 100,
           translateY: 0,
           itemsSpacing: 3,
-          itemDirection: "left-to-right",
+          itemDirection: "right-to-left",
           itemWidth: 80,
           itemHeight: 20,
           itemOpacity: 0.75,

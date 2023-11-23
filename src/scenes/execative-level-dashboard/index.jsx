@@ -1,7 +1,6 @@
 import { Box, Typography, useTheme, Button, IconButton } from "@mui/material";
 import { tokens } from "../../theme";
 import StatBox from "../../components/StatBox";
-import AccessibilityIcon from "@mui/icons-material/Accessibility";
 import LineChart from "../../components/LineChart";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -27,7 +26,7 @@ const ExecutiveLevelDashboard = () => {
     const fetchStatBoxData = async () => {
       try {
         const response = await getStatBoxData();
-   
+
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
         setTodayStudent(response.data.dailyStudentCount);
@@ -42,24 +41,19 @@ const ExecutiveLevelDashboard = () => {
           {
             id: "Total Students",
             color: tokens("dark").greenAccent[500],
-            data: lineChartDataResponse.data
+            data: lineChartDataResponse.data,
           },
         ];
         setLineChartData(chartData);
-      } catch (error) { 
+      } catch (error) {
         toast.error("Error fetching data");
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
     console.log(loading);
   }, []);
-  // if (loading) {
-  //   console.log(loading);
-  //   return <div id="cover-spin"></div>;
-  // }
   return (
     <Box m="0 20px">
-      {/* GRID & CHARTS */}
       {loading === false ? (
         <Box
           display="grid"
@@ -124,18 +118,17 @@ const ExecutiveLevelDashboard = () => {
               <Typography variant="h5" padding={"10px"}>
                 Computer Hours : {`${computerHour} h`}
               </Typography>
-              <Typography variant="h5"  padding={"10px"}>
+              <Typography variant="h5" padding={"10px"}>
                 Working Students : {`${workingStudent} / ${todayStudent}`}
               </Typography>
             </Box>
           </Box>
-          {/* ROW 2 */}
           <Box
             gridColumn="span 12"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
           >
-            <Box height="350px" m="-20px 0 0 0">
+            <Box height="345px" m="-20px 0 0 0">
               <LineChart
                 isDashboard={true}
                 data={lineChartData}

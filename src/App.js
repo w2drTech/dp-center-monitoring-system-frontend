@@ -3,7 +3,7 @@ import Topbar from "./scenes/global/Topbar";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import SidebarComponent from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
+
 import SignInSide from "./scenes/login/login";
 import StudentAttendanceInterface from "./scenes/student-attendance-interface";
 import Carousel from "./scenes/student-attendance-interface";
@@ -21,6 +21,11 @@ import HomeLayout from "./Layouts/HomeLayout";
 import DashboardLayout from "./Layouts/DashboardLayout";
 import ExecutiveLevelDashboard from "./scenes/execative-level-dashboard";
 import Notfound from "./scenes/NotFound/Notfound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CenterInchargeDashboard from "./scenes/center-incharge-dashboard";
+import Test from "./Layouts/Test";
+import CenterManagerDashboardLayout from "./Layouts/CenterInchargeDashboard";
+import ViewAllStudents from "./scenes/center-incharge-dashboard/view-all-students";
 function App() {
   const [theme, colorMode] = useMode();
   const images = [
@@ -29,7 +34,12 @@ function App() {
     "../../assets/3.jpg",
     // Add more image URLs as needed
   ];
-
+  const role = localStorage.getItem("Role");
+console.log(process.env)
+  const user = {
+    id: "1",
+    roles: role ?? [],
+  };
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -38,7 +48,8 @@ function App() {
         <div className="app">
           <main className="content">
             <Routes>
-              <Route path="/" exact element={<HomeLayout />}>
+              <Route index element={<HomeLayout />} />
+              <Route path="/" element={<HomeLayout />}>
                 <Route
                   path="/"
                   element={<HomeComponent images={countries} />}
@@ -46,18 +57,47 @@ function App() {
                 <Route path="register" element={<Register />} />
               </Route>
               <Route path="/login" element={<LoginLayout />} />
-              <Route path="/dashboard" element={<DashboardLayout />}>
-                <Route
-                  path="executive"
-                  element={<ExecutiveLevelDashboard />}
-                />
-                <Route
-                  path="student-attendance"
-                  element={<StudentAttendance />}
-                />
-                <Route path="top-performance" element={<TopPerformance />} />
+
+              <Route
+                element={
+                  <ProtectedRoute
+                    isAllowed={!!user && user.roles.includes("executive")}
+                  />
+                }
+              >
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                  <Route
+                    path="executive2"
+                    element={<ExecutiveLevelDashboard />}
+                  />
+                  <Route
+                    path="student-attendance"
+                    element={<StudentAttendance />}
+                  />
+                  <Route path="top-performance" element={<TopPerformance />} />
+                </Route>
               </Route>
-              <Route path="*" element={<Notfound/>}/>
+
+              <Route
+                element={
+                  <ProtectedRoute
+                    isAllowed={!!user && user.roles.includes("staff")}
+                  />
+                }
+              >
+                <Route
+                  path="/staff-dashboard"
+                  element={<CenterManagerDashboardLayout />}
+                >
+                  <Route
+                    path="center-manager"
+                    element={<CenterInchargeDashboard />}
+                  />
+                  <Route path="view-all" element={<ViewAllStudents />} />
+                </Route>
+              </Route>
+
+              <Route path="*" element={<Notfound />} />
             </Routes>
           </main>
         </div>

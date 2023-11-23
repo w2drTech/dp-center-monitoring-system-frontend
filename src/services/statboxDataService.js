@@ -1,7 +1,7 @@
 import http from './httpService';
-import apiConfig from '../utils/config.json';
 
-const apiEndPoint = `${apiConfig.apiUrl}executiveLevel/get/homeDetails`;
+const apiUrl = process.env.REACT_APP_API_URL;
+const apiEndPoint = `${process.env.REACT_APP_API_URL}executiveLevel/get/homeDetails`;
 
 export function getStatBoxData()
 {
