@@ -1,11 +1,10 @@
 import http from "./httpService";
+import apiConfig from "../utils/config.json";
 
-const apiUrl = process.env.REACT_APP_API_URL;
-console.log(apiUrl)
-const apiEndPointForGetStudent = `${process.env.REACT_APP_API_URL}students/get/studentLogin`;
-const apiEndpointForInsert = `${process.env.REACT_APP_API_URL}students/insert/student`;
-const apiEndPointForMarkAttendance = `${process.env.REACT_APP_API_URL}students/insert/student/attendanceIn`;
-const apiEndPointForUpdateAttendance = `${process.env.REACT_APP_API_URL}students/update/student/attendanceOut`;
+const apiEndPointForGetStudent = `${apiConfig.apiUrl}students/get/studentLogin`;
+const apiEndpointForInsert = `${apiConfig.apiUrl}students/insert/student`;
+const apiEndPointForMarkAttendance = `${apiConfig.apiUrl}students/insert/student/attendanceIn`;
+const apiEndPointForUpdateAttendance = `${apiConfig.apiUrl}students/update/student/attendanceOut`;
 
 export function getStudent(email) {
   return http.get(`${apiEndPointForGetStudent}/${email}`);

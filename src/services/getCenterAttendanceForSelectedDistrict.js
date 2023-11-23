@@ -1,8 +1,8 @@
 import http from './httpService';
+import apiConfig from '../utils/config.json';
 
-const apiUrl = process.env.REACT_APP_API_URL;
-const apiEndPoint = `${process.env.REACT_APP_API_URL}executiveLevel/get/studentAttendanceChatDetailsByDistrict`;
-const apiEndPointForCircles = `${process.env.REACT_APP_API_URL}executiveLevel/get/studentAttendanceDetailsByDistrict`;
+const apiEndPoint = `${apiConfig.apiUrl}executiveLevel/get/studentAttendanceChatDetailsByDistrict`;
+const apiEndPointForCircles = `${apiConfig.apiUrl}executiveLevel/get/studentAttendanceDetailsByDistrict`;
 
 export function getSelectedDistrictAttendance(districtId)
 {
