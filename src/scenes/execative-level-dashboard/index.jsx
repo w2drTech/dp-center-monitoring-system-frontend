@@ -50,7 +50,7 @@ const ExecutiveLevelDashboard = () => {
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
-    console.log(loading);
+
   }, []);
   return (
     <Box m="0 20px">

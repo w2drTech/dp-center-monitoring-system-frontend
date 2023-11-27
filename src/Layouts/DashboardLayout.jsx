@@ -13,7 +13,7 @@ import FileOpenOutlinedIcon from "@mui/icons-material/FileOpenOutlined";
 import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import Notfound from "../scenes/NotFound/Notfound";
-import { useState } from "react";
+import PCWorkHours from "../scenes/execative-level-dashboard/pc-work-hours";
 
 const menuItems = [
   {
@@ -26,29 +26,29 @@ const menuItems = [
     icon: <SchoolOutlinedIcon />,
     subItems: [
       {
-        title: "Student Attendance Details",
+        title: "Attendance Mapping",
         to: "student-attendance",
         icon: <HowToRegOutlinedIcon />,
       },
       {
-        title: "PC Work Hours Details",
-        to: "/menu-5",
+        title: "Work Hours Analysis: PCs",
+        to: "pc-performance",
         icon: <ComputerOutlinedIcon />,
       },
     ],
   },
   {
-    title: "Project Wise Details",
+    title: "Project Tracking",
     icon: <ChecklistRtlOutlinedIcon />,
     subItems: [
       {
         title: "Opened Projects",
-        to: "/menu-5",
+        to: "",
         icon: <FileOpenOutlinedIcon />,
       },
       {
         title: "Completed Projects",
-        to: "/menu-5",
+        to: "",
         icon: <RuleOutlinedIcon />,
       },
     ],
@@ -75,6 +75,7 @@ const DashboardLayout = () => {
           />
           <Route path="/student-attendance" element={<StudentAttendance />} />
           <Route path="/top-performance" element={<TopPerformance />} />
+          <Route path="/pc-performance" element={<PCWorkHours />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </main>

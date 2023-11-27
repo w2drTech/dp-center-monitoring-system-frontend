@@ -64,7 +64,7 @@ const StudentAttendance = () => {
     // };
     response.data.forEach((item) => {
       const district = item.district;
-      console.log(item.indexx);
+
       if (!districtArrays[district]) {
         districtArrays[district] = {
           id: district.toLowerCase(), // Convert district name to lowercase for the id

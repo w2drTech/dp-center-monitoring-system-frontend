@@ -4,18 +4,13 @@ import {
   FormHelperText,
   InputLabel,
   Select,
-  useTheme,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Formik } from "formik";
@@ -25,7 +20,6 @@ import * as Yup from "yup";
 import MenuItem from "@mui/material/MenuItem";
 import { getProvinces } from "../../services/areaService";
 import { getDistricts } from "../../services/districtService";
-import { tokens } from "../../theme";
 import { getCenters } from "../../services/centerService";
 import { registerStudent } from "../../services/studentAttendanceService";
 import { toast } from "react-toastify";
@@ -143,7 +137,6 @@ const Register = () => {
               onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
                 try {
-                  console.log()
                   const response = await registerStudent(values);
                   if (response.data.o_sql_msg === "success") {
                     toast.success(

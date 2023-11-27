@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 import { getStatBoxData } from "../../services/statboxDataService";
 
 import "../../../src/style.css";
-import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
+
+import { getSelectedCenterAttendance, getSelectedCenterAttendanceForCircle } from "../../services/getCenterAttendanceDetails";
 const CenterInchargeDashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -24,17 +25,15 @@ const CenterInchargeDashboard = () => {
 
   useEffect(() => {
     const fetchStatBoxData = async () => {
+      const centerId = localStorage.getItem("CenterCode");
       try {
-        const response = await getStatBoxData();
-
-        const lineChartDataResponse =
-          await getExecutiveDashboardLineChartData();
-        setTodayStudent(response.data.dailyStudentCount);
+        const lineChartDataResponse = await getSelectedCenterAttendance(
+          centerId
+        );
+        const response = await getSelectedCenterAttendanceForCircle(centerId);
+        setTodayStudent(response.data.todayStudentCount);
         setWorkingStudents(response.data.currentStudentCount);
-        setWorkingCenters(response.data.dailyCenterCount);
-        setComputerHours(response.data.dailyComputerHours);
         setAllRegisteredStudents(response.data.allStudentCount);
-        setAllRegisteredCenters(response.data.allCenterCount);
         setAllPCCount(response.data.allPCsCount);
         setTodayPCCount(response.data.dailyPCsCount);
         const chartData = [
@@ -50,7 +49,6 @@ const CenterInchargeDashboard = () => {
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
-    console.log(loading);
   }, []);
   return (
     <Box m="0 20px">
@@ -84,13 +82,13 @@ const CenterInchargeDashboard = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <StatBox
+            {/* <StatBox
               name="liveStudent"
               title="Today PC Hours"
               progress={`${(todayPCs / allPcs) * 100}`}
               value={todayPCs}
               fullStudentValue={allPcs}
-            />
+            /> */}
           </Box>
           <Box
             gridColumn="span 3"
@@ -99,13 +97,13 @@ const CenterInchargeDashboard = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <StatBox
+            {/* <StatBox
               name="liveCenters"
               title="Live Working Centers"
               progress={`${(workingCenters / allRegisteredCenters) * 100}`}
-              value={workingCenters}
-              fullStudentValue={allRegisteredCenters}
-            />
+              value=""
+              fullStudentValue=""
+            /> */}
           </Box>
           <Box
             gridColumn="span 3"
@@ -116,7 +114,7 @@ const CenterInchargeDashboard = () => {
           >
             <Box>
               <Typography variant="h5" padding={"10px"}>
-                Computer Hours : {`${computerHour} h`}
+                Last Month Total Attendance : 0
               </Typography>
               <Typography variant="h5" padding={"10px"}>
                 Working Students : {`${workingStudent} / ${todayStudent}`}

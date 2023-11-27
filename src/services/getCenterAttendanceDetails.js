@@ -6,7 +6,6 @@ const apiEndPointForCircles = `${apiConfig.apiUrl}executiveLevel/get/studentAtte
 
 export function getSelectedCenterAttendance(centerId)
 {
-    console.log(`${apiEndPoint}/${centerId}`)
     return http.get(`${apiEndPoint}/${centerId}`);  
 }
 export function getSelectedCenterAttendanceForCircle(centerId)

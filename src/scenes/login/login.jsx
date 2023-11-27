@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -47,16 +45,18 @@ export default function SignInSide() {
   const handleFormSubmit = async (values) => {
     try {
       const response = await login(values.email, values.password);
-      console.log(response);
       localStorage.setItem("Role", response.data.userType);
-      // const Rolevalue = localStorage.getItem("Role");
+
       if (response.data.userType === "ADM") {
         window.location.href = "dashboard/executive2";
       }
-      // if(Rolevalue === "staff")
-      // {
-      //   window.location.href = "staff-dashboard/center-manager";
-      // }
+      else if(response.data.userType === "CIC")
+      {
+        localStorage.setItem("CenterCode", response.data.centerCode);
+        localStorage.setItem("Status",response.data.attendanceCode);
+        localStorage.setItem("User",response.data.userCode);
+        window.location.href = "staff-dashboard/center-manager";
+      }
     } catch (error) {
       toast.error("Invalid username or password");
     }

@@ -1,13 +1,12 @@
-import http from './httpService';
-import apiConfig from '../utils/config.json';
+import http from "./httpService";
+import apiConfig from "../utils/config.json";
 
-const apiEndPoint = `${apiConfig.apiUrl}centerInCharge/loginAdmin`;
+const apiEndPoint = `${apiConfig.apiUrl}centerInCharge/login`;
 
-export function login(email,password)
-{
-    return http.get(`${apiEndPoint}/${email}/${password}`)  
+export function login(email, password) {
+  return http.get(`${apiEndPoint}/${email}/${password}`);
 }
 
 export default {
-    login,
-}
+  login,
+};

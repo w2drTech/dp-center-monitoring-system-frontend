@@ -5,65 +5,54 @@ import Topbar from "../scenes/global/Topbar";
 import StudentAttendance from "../scenes/studentAttendance";
 import TopPerformance from "../scenes/table/table";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import ChecklistRtlOutlinedIcon from "@mui/icons-material/ChecklistRtlOutlined";
-import ComputerOutlinedIcon from "@mui/icons-material/ComputerOutlined";
-import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
-import FileOpenOutlinedIcon from "@mui/icons-material/FileOpenOutlined";
-import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
-import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+
 import Notfound from "../scenes/NotFound/Notfound";
 import CenterInchargeDashboard from "../scenes/center-incharge-dashboard";
-import LineChart from "../components/LineChart";
-import Test from "./Test";
 import ViewAllStudents from "../scenes/center-incharge-dashboard/view-all-students";
-const status = "Start";
-const menuItems = [
-  {
-    title: "Dashboard",
-    to: "center-manager",
-    icon: <HomeOutlinedIcon />,
-  },
-  {
-    title: "All Students",
-    to: "view-all",
-    icon: <HomeOutlinedIcon />,
-  },
-  {
-    title: "PC Data",
-    to: "view-all",
-    icon: <HomeOutlinedIcon />,
-  },
-  {
-    title: "Daily Data",
-    icon: <HomeOutlinedIcon />,
-    subItems: [
-      {
-        title: "Today Students",
-        to: "/menu-5",
-        icon: <HomeOutlinedIcon />,
-      },
-    
-    ],
-  },
-  {
-    title: "Upload Files",
-    to: "/menu-2",
-    icon: <HomeOutlinedIcon />,
-  },
-  {
-    title: `${status} The Center`,
-    onclick:()=>{status="End"},
-    icon: <AlarmOnIcon />,
-  },
-];
-const CenterManagerDashboardLayout = () => { 
+import DailyStudentOverview from "../scenes/center-incharge-dashboard/daily-student-overview";
+import { useEffect, useState } from "react";
+import { setCenterStart } from "../services/center-manager-services/centeroperatinghoursService";
+import PCPerformanceStats from "../scenes/center-incharge-dashboard/pc-perfomance";
+import UploadFiles from "../scenes/center-incharge-dashboard/upload-files";
+
+const CenterManagerDashboardLayout = () => {
+  const menuItems = [
+    {
+      title: "Dashboard",
+      to: "center-manager",
+      icon: <HomeOutlinedIcon />,
+    },
+    {
+      title: "Registered Students",
+      to: "view-all",
+      icon: <HomeOutlinedIcon />,
+    },
+    {
+      title: "PC Performance Stats",
+      to: "pc-stats",
+      icon: <HomeOutlinedIcon />,
+    },
+    {
+      title: "Daily Analytics",
+      icon: <HomeOutlinedIcon />,
+      subItems: [
+        {
+          title: "Daily Student Overview",
+          to: "today-students",
+          icon: <HomeOutlinedIcon />,
+        },
+      ],
+    },
+    {
+      title: "Upload Files",
+      to: "file-upload",
+      icon: <HomeOutlinedIcon />,
+    },
+  ];
+
   return (
     <div className="app">
-      <SidebarComponent
-        menuItems={ menuItems}
-      />
+      <SidebarComponent menuItems={menuItems} />
       <main className="content">
         <Topbar />
 
@@ -74,8 +63,10 @@ const CenterManagerDashboardLayout = () => {
             element={<CenterInchargeDashboard />}
           />
           <Route path="/view-all" element={<ViewAllStudents />} />
-
-          <Route path="*" element={<Notfound/>}/>
+          <Route path="/today-students" element={<DailyStudentOverview />} />
+          <Route path="/pc-stats" element={<PCPerformanceStats />} />
+          <Route path="/file-upload" element={<UploadFiles />} />
+          <Route path="*" element={<Notfound />} />
         </Routes>
       </main>
     </div>

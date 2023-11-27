@@ -4,35 +4,35 @@ import {
   Grid,
   InputLabel,
   TextField,
-  Typography,
   useTheme,
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import { mockDataTeam } from "../../../data/mockData";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { toast } from "react-toastify";
+import {
+  getCenterAllStudents,
+  updateRegisteredStudent,
+} from "../../../services/center-manager-services/getStudentData";
+import Loader from "../../global/Loader";
+
 const ViewAllStudents = () => {
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState({});
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [selectedData, setSelectedData] = useState({});
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [isLoading, setIsLoading] = useState(true);
   const initialValues = {
     email: "",
-    name: "",
-    phone: "",
-    guardianPhone: "",
-    province: "",
-    district: "",
-    center: "",
+    studentName: "",
+    phoneNumber: "",
+    parentPhoneNumber: "",
     address: "",
   };
   const validationSchema = Yup.object().shape({
@@ -41,25 +41,31 @@ const ViewAllStudents = () => {
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         "Invalid email format: Enter a valid specific email address"
       )
-      .required("*Required field"),
-    name: Yup.string().required("Name is required").trim(),
-    center: Yup.string().required("Center name is required"),
-    phone: Yup.string()
-      .required("Phone number is required")
+      .trim(),
+    phoneNumber: Yup.string()
       .matches(/^0\d{9}$/, "Invalid phone number. 0xxxxxxxxx")
       .trim(),
-    guardianPhone: Yup.string()
-      .required("Guardian phone number is required")
+    parentPhoneNumber: Yup.string()
       .matches(/^0\d{9}$/, "Invalid phone number. 0xxxxxxxxx")
       .trim(),
-    district: Yup.string().required("District is required"),
-    province: Yup.string().required("Province is required"),
-    address: Yup.string().required("Address is required").trim(),
   });
+
+  useEffect(() => {
+    const centerId = localStorage.getItem("CenterCode");
+    const fetchAllStudentData = async () => {
+      try {
+        const response = await getCenterAllStudents(centerId);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        toast.error("Error fetching data");
+      }
+    };
+    fetchAllStudentData();
+  }, []);
   const handleUpdate = (id) => {
-    // Handle update logic here
-    const data = mockDataTeam[id];
-    setData(data)
+    const selectedData = data.find((element) => element.studentCode === id);
+    setSelectedData(selectedData);
     handleOpen();
   };
   const style = {
@@ -75,15 +81,15 @@ const ViewAllStudents = () => {
     textAlign: "center",
   };
   const columns = [
-    { field: "name", headerName: "Name", flex: 4 },
+    { field: "studentName", headerName: "Name", flex: 4 },
     {
-      field: "phone",
+      field: "phoneNumber",
       headerName: "Phone Number",
       flex: 3,
       cellClassName: "name-column--cell",
     },
     {
-      field: "guardianPhone",
+      field: "parentPhoneNumber",
       headerName: "Guardian Phone Number",
       flex: 3,
       type: "number",
@@ -91,8 +97,8 @@ const ViewAllStudents = () => {
       align: "left",
     },
     {
-      field: "last",
-      headerName: "Last Active Date",
+      field: "address",
+      headerName: "Address",
       flex: 4,
       type: "number",
       headerAlign: "left",
@@ -119,45 +125,52 @@ const ViewAllStudents = () => {
   ];
   return (
     <Box m="0 20px">
-      <Box
-        display="grid"
-        height="78vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-            fontSize:"15px"
-          },
-          "& .name-column--cell": {
-            color: colors.primary[100],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            border: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.redAccent[100]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          rows={mockDataTeam}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-        />
-      </Box>
+      {isLoading ? (
+        // Show loader while data is being fetched
+        <Loader />
+      ) : (
+        <Box
+          display="grid"
+          height="78vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+              fontSize: "15px",
+            },
+            "& .name-column--cell": {
+              color: colors.primary[100],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              border: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.redAccent[100]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            rows={data}
+            getRowId={(row) => row.studentCode}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+          />
+        </Box>
+      )}
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -170,30 +183,41 @@ const ViewAllStudents = () => {
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
-              // try {
-              //   console.log()
-              //   const response = await registerStudent(values);
-              //   if (response.data.o_sql_msg === "success") {
-              //     toast.success(
-              //       "You are successfully registered for DP education"
-              //     );
-              //     navigate('/');
-              //   } else if (
-              //     response.data.o_sql_msg === "STUDENT ALREADY INSERT"
-              //   ) {
-              //     toast.error("This email is already in use");
-              //   }
-              // } catch (ex) {
-              //   toast.error("Error fetching data");
-              // }
+              Object.keys(values).forEach((fieldName) => {
+                if (
+                  values[fieldName] === "" &&
+                  selectedData[fieldName] !== undefined
+                ) {
+                  values[fieldName] = selectedData[fieldName];
+                }
+              });
+              try {
+                const studentCode = selectedData.studentCode;
+                const response = await updateRegisteredStudent(
+                  studentCode,
+                  values
+                );
+                if (response.data.sql_msg === "success") {
+                  toast.success("Student updated successfully!");
+                } else {
+                  toast.error(
+                    "An error occurred while updating the student. Please try again."
+                  );
+                }
+              } catch (error) {
+                toast.error("Error submitting form:", error);
+              } finally {
+                handleClose(); // Close the modal after submission
+                setSubmitting(false);
+              }
             }}
           >
             {({
               values,
-              errors,
-              touched,
               handleSubmit,
               isValid,
+              errors,
+              touched,
               handleBlur,
               handleChange,
               resetForm,
@@ -206,81 +230,94 @@ const ViewAllStudents = () => {
                     fullWidth
                     variant="filled"
                     id="email"
-                    label={data.name}
+                    label={selectedData.email}
                     name="email"
                     autoComplete="none"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email.toLocaleLowerCase()}
+                    error={!!touched.email && !!errors.email}
+                    helperText={touched.email && errors.email}
                   />
-                  <InputLabel margin="0px" htmlFor="name">
+                  <InputLabel margin="0px" htmlFor="studentName">
                     Name
                   </InputLabel>
                   <TextField
                     margin="normal"
                     variant="filled"
                     fullWidth
-                    name="name"
-                    label="Name"
+                    name="studentName"
+                    label={selectedData.studentName}
                     type="text"
-                    id="name"
+                    id="studentName"
                     autoComplete="none"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.name}
+                    error={!!touched.studentName && !!errors.studentName}
+                    helperText={touched.studentName && errors.studentName}
                   />
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                      <InputLabel htmlFor="phone">Phone Number</InputLabel>
+                      <InputLabel htmlFor="phoneNumber">
+                        Phone Number
+                      </InputLabel>
                       <TextField
                         margin="normal"
                         variant="filled"
                         fullWidth
-                        name="phone"
-                        label="Phone Number"
+                        name="phoneNumber"
+                        label={selectedData.phoneNumber}
                         type="text"
-                        id="phone"
+                        id="phoneNumber"
                         autoComplete="none"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.phone}
+                        error={!!touched.phoneNumber && !!errors.phoneNumber}
+                        helperText={touched.phoneNumber && errors.phoneNumber}
                       />
                     </Grid>
                     <Grid item xs={6}>
-                      <InputLabel htmlFor="guardianPhone">
+                      <InputLabel htmlFor="parentPhoneNumber">
                         Guardian Phone Number
                       </InputLabel>
                       <TextField
                         margin="normal"
                         variant="filled"
                         fullWidth
-                        name="guardianPhone"
-                        label="Guardian Phone Number"
+                        name="parentPhoneNumber"
+                        label={selectedData.parentPhoneNumber}
                         type="text"
-                        id="guardianPhone"
+                        id="parentPhoneNumber"
                         autoComplete="none"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.guardianPhone}
-
+                        value={values.parentPhoneNumber}
+                        error={
+                          !!touched.parentPhoneNumber &&
+                          !!errors.parentPhoneNumber
+                        }
+                        helperText={
+                          touched.parentPhoneNumber && errors.parentPhoneNumber
+                        }
                       />
                     </Grid>
                   </Grid>
-                  <InputLabel htmlFor="address">
-                    Address
-                  </InputLabel>
+                  <InputLabel htmlFor="address">Address</InputLabel>
                   <TextField
                     margin="normal"
                     variant="filled"
                     fullWidth
                     name="address"
-                    label="Address"
+                    label={selectedData.address}
                     type="address"
                     id="address"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.address}
-
+                    error={!!touched.address && !!errors.address}
+                    helperText={touched.address && errors.address}
                   />
                   <Box display="flex" justifyContent="center" marginTop="10px">
                     <Button
@@ -319,3 +356,4 @@ const ViewAllStudents = () => {
 };
 
 export default ViewAllStudents;
+/**/

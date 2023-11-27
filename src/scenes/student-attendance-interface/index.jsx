@@ -72,7 +72,7 @@ function Carousel({ images }) {
       };
       const response = await markAttendance(data);
       const attendanceKey = response.data.retunValue;
-      console.log(response);
+
 
       if (response.data.o_sql_msg === "success") {
         localStorage.setItem(studentAttendanceKey, attendanceKey);
@@ -242,7 +242,7 @@ function Carousel({ images }) {
 
                     try {
                       const response = await getStudent(values.email);
-                      console.log(response);
+
                       setStudentName(response.data.studentName);
                       setPcId(values.pcId);
                       setEmail(values.email);
@@ -255,7 +255,7 @@ function Carousel({ images }) {
                         toast.error("Error: Invalid email. Please check your credentials and try again.")
                       }
                     } catch (ex) {
-                      console.log(ex);
+
                     }
                   }}
                   initialValues={initialValues}

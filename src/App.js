@@ -26,6 +26,11 @@ import CenterInchargeDashboard from "./scenes/center-incharge-dashboard";
 import Test from "./Layouts/Test";
 import CenterManagerDashboardLayout from "./Layouts/CenterInchargeDashboard";
 import ViewAllStudents from "./scenes/center-incharge-dashboard/view-all-students";
+import DailyStudentOverview from "./scenes/center-incharge-dashboard/daily-student-overview";
+import PCPerformanceStats from "./scenes/center-incharge-dashboard/pc-perfomance";
+import UploadFiles from "./scenes/center-incharge-dashboard/upload-files";
+import PCWorkHours from "./scenes/execative-level-dashboard/pc-work-hours";
+
 function App() {
   const [theme, colorMode] = useMode();
   const images = [
@@ -35,7 +40,7 @@ function App() {
     // Add more image URLs as needed
   ];
   const role = localStorage.getItem("Role");
-console.log(process.env)
+
   const user = {
     id: "1",
     roles: role ?? [],
@@ -75,13 +80,14 @@ console.log(process.env)
                     element={<StudentAttendance />}
                   />
                   <Route path="top-performance" element={<TopPerformance />} />
+                  <Route path="pc-performance" element={<PCWorkHours />} />
                 </Route>
               </Route>
 
               <Route
                 element={
                   <ProtectedRoute
-                    isAllowed={!!user && user.roles.includes("staff")}
+                    isAllowed={!!user && user.roles.includes("CIC")}
                   />
                 }
               >
@@ -93,7 +99,10 @@ console.log(process.env)
                     path="center-manager"
                     element={<CenterInchargeDashboard />}
                   />
-                  <Route path="view-all" element={<ViewAllStudents />} />
+                  <Route path="view-all" element={<ViewAllStudents/>} />
+                  <Route path="today-students" element={<DailyStudentOverview />} />
+                  <Route path="pc-stats" element={<PCPerformanceStats />} />
+                  <Route path="file-upload" element={<UploadFiles />} />
                 </Route>
               </Route>
 
