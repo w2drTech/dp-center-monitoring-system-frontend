@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  Select,
-} from "@mui/material";
+import { FormControl, FormHelperText, InputLabel, Select } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -37,22 +32,28 @@ const initialValues = {
 };
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-  .matches(
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    "Invalid email format: Enter a valid specific email address"
-  )
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format: Enter a valid specific email address"
+    )
     .required("*Required field"),
   name: Yup.string().required("Name is required").trim(),
   center: Yup.string().required("Center name is required"),
-  phone: Yup.string().required("Phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx').trim(),
-  guardianPhone: Yup.string().required("Guardian phone number is required").matches(/^0\d{9}$/, 'Invalid phone number. 0xxxxxxxxx').trim(),
+  phone: Yup.string()
+    .required("Phone number is required")
+    .matches(/^0\d{9}$/, "Invalid phone number. 0xxxxxxxxx")
+    .trim(),
+  guardianPhone: Yup.string()
+    .required("Guardian phone number is required")
+    .matches(/^0\d{9}$/, "Invalid phone number. 0xxxxxxxxx")
+    .trim(),
   district: Yup.string().required("District is required"),
   province: Yup.string().required("Province is required"),
   address: Yup.string().required("Address is required").trim(),
 });
 const defaultTheme = createTheme();
 const Register = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [centers, setCenters] = useState([]);
@@ -74,7 +75,7 @@ const Register = () => {
       if (selectedProvince) {
         try {
           const response = await getDistricts(selectedProvince); // You'll need a function to fetch districts based on the selected province
-    
+
           setDistricts(response.data); // Assuming response is an array of districts
         } catch (error) {
           toast.error("Error fetching data");
@@ -142,7 +143,7 @@ const Register = () => {
                     toast.success(
                       "You are successfully registered for DP education"
                     );
-                    navigate('/');
+                    navigate("/");
                   } else if (
                     response.data.o_sql_msg === "STUDENT ALREADY INSERT"
                   ) {

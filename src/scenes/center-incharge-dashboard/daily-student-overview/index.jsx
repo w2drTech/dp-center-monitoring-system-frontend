@@ -22,6 +22,7 @@ const DailyStudentOverview = () => {
     const fetchAllStudentData = async () => {
       try {
         const response = await getCenterTodayStudents(centerId);
+        console.log(response)
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -44,10 +45,24 @@ const DailyStudentOverview = () => {
       }
     } catch (error) {
       toast.error("Something went wrong while login out the student");
+      console.log(error)
     }
   };
   const columns = [
-    { field: "name", headerName: "Name", flex: 4 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 4,
+      renderCell: (params) => (
+        <Box style={{ textTransform: "uppercase" }}>{params.value}</Box>
+      ),
+    },
+    {
+      field: "pcCode",
+      headerName: "PC Id",
+      flex: 3,
+      cellClassName: "name-column--cell",
+    },
     {
       field: "loginTime",
       headerName: "Login Time",

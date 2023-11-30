@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -24,14 +24,42 @@ const Topbar = () => {
   const colorMode = useContext(ColorModeContext);
   const [status, setStatus] = useState("");
   const [user, setUser] = useState("");
+  const [name, setName] = useState("");
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://ipinfo.io?token=151a5062f7d8bc');
+        const data = await response.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error('Error fetching IP address:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   useEffect(() => {
     setUser(localStorage.getItem("Role"));
+    setName(localStorage.getItem("UserName"));
     setStatus(localStorage.getItem("Status") === "NULL" ? "Start" : "End");
   }, []);
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       <Box>
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        {user === "CIC" ? (
+          <Header
+            title="DASHBOARD"
+            subtitle={`Hello! ${name}, Welcome to your dashboard`}
+            ipAddress = {`Your IP : ${ipAddress}`}
+          />
+        ) : 
+          <Header
+            title="DASHBOARD"
+            subtitle={`Hello! Welcome to your dashboard`}
+          />
+        }
       </Box>
       <Box>
         {user === "CIC" && status === "Start" ? (

@@ -4,7 +4,7 @@ import httpService from "../httpService";
 const apiEndPoint = `${apiConfig.apiUrl}centerInCharge/get/allStudents`;
 const apiEndPointForTodayStudents = `${apiConfig.apiUrl}centerInCharge/get/todayAllStudents`;
 const apiEndPointUpdateStudent = `${apiConfig.apiUrl}centerInCharge/update/student`;
-const apiEndPointUpdateAttendance= `${apiConfig.apiUrl}centerInCharge/update/attendanceOut`;
+const apiEndPointUpdateAttendance = `${apiConfig.apiUrl}centerInCharge/update/student/attendanceOut`;
 
 export function getCenterAllStudents(centerId) {
   return httpService.get(`${apiEndPoint}/${centerId}`);
@@ -24,6 +24,7 @@ export function updateRegisteredStudent(studentCode, student) {
   return httpService.put(apiEndPointUpdateStudent, obj);
 }
 export function updateStudentAttendance(studentAttendanceCode) {
+  console.log(studentAttendanceCode);
   const obj = {
     attendanceCode: studentAttendanceCode,
   };
@@ -32,5 +33,5 @@ export function updateStudentAttendance(studentAttendanceCode) {
 export default {
   getCenterAllStudents,
   getCenterTodayStudents,
-  updateStudentAttendance
+  updateStudentAttendance,
 };

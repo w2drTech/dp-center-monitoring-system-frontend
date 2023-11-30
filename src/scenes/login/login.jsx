@@ -46,7 +46,7 @@ export default function SignInSide() {
     try {
       const response = await login(values.email, values.password);
       localStorage.setItem("Role", response.data.userType);
-
+      console.log(response);
       if (response.data.userType === "ADM") {
         window.location.href = "dashboard/executive2";
       }
@@ -55,7 +55,13 @@ export default function SignInSide() {
         localStorage.setItem("CenterCode", response.data.centerCode);
         localStorage.setItem("Status",response.data.attendanceCode);
         localStorage.setItem("User",response.data.userCode);
+        localStorage.setItem("UserName",response.data.userName);
+        
         window.location.href = "staff-dashboard/center-manager";
+      }
+      else if(response.data.userType === "DPS")
+      {
+        window.location.href = "dp-staff-dashboard/staff";
       }
     } catch (error) {
       toast.error("Invalid username or password");
@@ -156,7 +162,7 @@ export default function SignInSide() {
                         </Link>
                       </Grid>
                     </Grid>
-                    <Copyright sx={{ mt: 5 }} />
+                    {/* <Copyright sx={{ mt: 5 }} /> */}
                   </form>
                 </Box>
               )}

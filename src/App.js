@@ -30,6 +30,10 @@ import DailyStudentOverview from "./scenes/center-incharge-dashboard/daily-stude
 import PCPerformanceStats from "./scenes/center-incharge-dashboard/pc-perfomance";
 import UploadFiles from "./scenes/center-incharge-dashboard/upload-files";
 import PCWorkHours from "./scenes/execative-level-dashboard/pc-work-hours";
+import DpStaffDashboardLayout from "./Layouts/DPStaffDashboard";
+import StaffDashboard from "./scenes/staff-dashboard/dashboard";
+import AddCenter from "./scenes/staff-dashboard/add-center";
+import AddCenterManager from "./scenes/staff-dashboard/add-center-manager";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -99,13 +103,41 @@ function App() {
                     path="center-manager"
                     element={<CenterInchargeDashboard />}
                   />
-                  <Route path="view-all" element={<ViewAllStudents/>} />
-                  <Route path="today-students" element={<DailyStudentOverview />} />
+                  <Route path="view-all" element={<ViewAllStudents />} />
+                  <Route
+                    path="today-students"
+                    element={<DailyStudentOverview />}
+                  />
                   <Route path="pc-stats" element={<PCPerformanceStats />} />
                   <Route path="file-upload" element={<UploadFiles />} />
                 </Route>
               </Route>
-
+              <Route
+                element={
+                  <ProtectedRoute
+                    isAllowed={!!user && user.roles.includes("DPS")}
+                  />
+                }
+              >
+                <Route
+                  path="/dp-staff-dashboard"
+                  element={<DpStaffDashboardLayout />}
+                >
+                  <Route path="staff" element={<ExecutiveLevelDashboard />} />
+                  <Route
+                    path="student-attendance"
+                    element={<StudentAttendance />}
+                  />
+                  <Route
+                    path="add-center"
+                    element={<AddCenter />}
+                  />
+                  <Route
+                    path="add-center-manager"
+                    element={<AddCenterManager />}
+                  />
+                </Route>
+              </Route>
               <Route path="*" element={<Notfound />} />
             </Routes>
           </main>

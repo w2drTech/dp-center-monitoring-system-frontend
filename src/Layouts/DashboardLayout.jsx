@@ -37,27 +37,27 @@ const menuItems = [
       },
     ],
   },
-  {
-    title: "Project Tracking",
-    icon: <ChecklistRtlOutlinedIcon />,
-    subItems: [
-      {
-        title: "Opened Projects",
-        to: "",
-        icon: <FileOpenOutlinedIcon />,
-      },
-      {
-        title: "Completed Projects",
-        to: "",
-        icon: <RuleOutlinedIcon />,
-      },
-    ],
-  },
-  {
-    title: "Top Performance Centers",
-    to: "top-performance",
-    icon: <TrendingUpOutlinedIcon />,
-  },
+  // {
+  //   title: "Project Tracking",
+  //   icon: <ChecklistRtlOutlinedIcon />,
+  //   subItems: [
+  //     {
+  //       title: "Opened Projects",
+  //       to: "",
+  //       icon: <FileOpenOutlinedIcon />,
+  //     },
+  //     {
+  //       title: "Completed Projects",
+  //       to: "",
+  //       icon: <RuleOutlinedIcon />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Top Performance Centers",
+  //   to: "top-performance",
+  //   icon: <TrendingUpOutlinedIcon />,
+  // },
 ];
 
 const DashboardLayout = () => {

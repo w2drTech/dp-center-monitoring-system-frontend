@@ -81,17 +81,24 @@ const ViewAllStudents = () => {
     textAlign: "center",
   };
   const columns = [
-    { field: "studentName", headerName: "Name", flex: 4 },
+    {
+      field: "studentName",
+      headerName: "Name",
+      flex: 4,
+      cellClassName: "name-column--cell",
+      renderCell: (params) => (
+        <Box style={{ textTransform: "uppercase" }}>{params.value}</Box>
+      ),
+    },
     {
       field: "phoneNumber",
       headerName: "Phone Number",
-      flex: 3,
-      cellClassName: "name-column--cell",
+      flex: 2,
     },
     {
       field: "parentPhoneNumber",
       headerName: "Guardian Phone Number",
-      flex: 3,
+      flex: 2,
       type: "number",
       headerAlign: "left",
       align: "left",
@@ -103,6 +110,9 @@ const ViewAllStudents = () => {
       type: "number",
       headerAlign: "left",
       align: "left",
+      renderCell: (params) => (
+        <Box style={{ textTransform: "uppercase" }}>{params.value}</Box>
+      ),
     },
     {
       field: "action",

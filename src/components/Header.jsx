@@ -1,9 +1,13 @@
 import { Typography, Box, useTheme } from "@mui/material";
 import { tokens } from "../theme";
+import { useEffect, useState } from "react";
 
-const Header = ({ title, subtitle }) => {
+const Header = ({ title, subtitle,ipAddress }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+ 
+
   return (
     <Box mb="30px">
       <Typography
@@ -16,6 +20,9 @@ const Header = ({ title, subtitle }) => {
       </Typography>
       <Typography variant="h5" color={colors.greenAccent[400]}>
         {subtitle}
+      </Typography>
+      <Typography variant="h5" color={colors.greenAccent[400]}>
+        {ipAddress}
       </Typography>
     </Box>
   );
