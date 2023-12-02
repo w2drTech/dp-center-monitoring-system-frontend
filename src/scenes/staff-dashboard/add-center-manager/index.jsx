@@ -113,7 +113,7 @@ const AddCenterManager = () => {
                     id="name"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.name.trim()}
+                    value={values.name}
                     error={!!touched.name && !!errors.name}
                     helperText={touched.name && errors.name}
                   />
@@ -139,7 +139,7 @@ const AddCenterManager = () => {
                     name="centerCode"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.centerCode}
+                    value={values.centerCode.trim()}
                     error={!!touched.centerCode && !!errors.centerCode}
                     helperText={touched.centerCode && errors.centerCode}
                   />
@@ -167,7 +167,7 @@ const AddCenterManager = () => {
                     id="address"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.address.trim()}
+                    value={values.address}
                     error={!!touched.address && !!errors.address}
                     helperText={touched.address && errors.address}
                   />

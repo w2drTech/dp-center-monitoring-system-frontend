@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { FormControl, FormHelperText, InputLabel, Select } from "@mui/material";
+import {
+  Backdrop,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Modal,
+  Select,
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -16,7 +23,10 @@ import MenuItem from "@mui/material/MenuItem";
 import { getProvinces } from "../../services/areaService";
 import { getDistricts } from "../../services/districtService";
 import { getCenters } from "../../services/centerService";
-import { registerStudent } from "../../services/studentAttendanceService";
+import {
+  registerStudent,
+  verifyStudentEmail,
+} from "../../services/studentAttendanceService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -29,6 +39,9 @@ const initialValues = {
   district: "",
   center: "",
   address: "",
+};
+const initialValues2 = {
+  verificationCode: "",
 };
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -51,9 +64,31 @@ const validationSchema = Yup.object().shape({
   province: Yup.string().required("Province is required"),
   address: Yup.string().required("Address is required").trim(),
 });
+
+const validationSchema2 = Yup.object().shape({
+  verificationCode: Yup.string().required("Verification code is required"),
+});
 const defaultTheme = createTheme();
 const Register = () => {
   const navigate = useNavigate();
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "#0000005e",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    textAlign: "center",
+  };
+
+  const [open, setOpen] = useState(false);
+  const [studentCode, setStudentCode] = useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [centers, setCenters] = useState([]);
@@ -136,19 +171,26 @@ const Register = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting }) => {
+                console.log(values);
                 setSubmitting(true);
                 try {
                   const response = await registerStudent(values);
-                  if (response.data.o_sql_msg === "success") {
-                    toast.success(
-                      "You are successfully registered for DP education"
-                    );
-                    navigate("/");
-                  } else if (
-                    response.data.o_sql_msg === "STUDENT ALREADY INSERT"
-                  ) {
-                    toast.error("This email is already in use");
-                  }
+                  console.log(response);
+                  console.log(response.data.retunValue);
+                  setTimeout(() => {
+                    if (response.data.o_sql_msg === "success") {
+                      setStudentCode(response.data.retunValue);
+                      handleOpen();
+                      // toast.success(
+                      //   "You are successfully registered for DP education"
+                      // );
+                      // navigate("/");
+                    } else if (
+                      response.data.o_sql_msg === "STUDENT ALREADY INSERT"
+                    ) {
+                      toast.error("This email is already in use");
+                    }
+                  }, 2000);
                 } catch (ex) {
                   toast.error("Error fetching data");
                 }
@@ -367,6 +409,104 @@ const Register = () => {
             </Formik>
           </Box>
         </Grid>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          disableBackdropClick={true}
+        >
+          <Box sx={style}>
+            <Formik
+              initialValues={initialValues2}
+              validationSchema={validationSchema2}
+              onSubmit={async (values, { setSubmitting }) => {
+                setSubmitting(true);
+                const otp = parseInt(values.verificationCode, 10);
+                const obj = {
+                  studentCode: studentCode,
+                  otp: otp,
+                };
+
+                try {
+                  const response = await verifyStudentEmail(obj);
+                  console.log("asd", response);
+                  if (response.data.o_sql_msg === "success") {
+                    toast.success(
+                      "You are successfully registered for DP education"
+                    );
+
+                    navigate("/");
+                  } else {
+                    toast.error("Registration was unsuccessful ");
+                  }
+                } catch (error) {
+                  toast.error(error.message);
+                  console.log(error);
+                }
+              }}
+            >
+              {({
+                values,
+                handleSubmit,
+                isValid,
+                errors,
+                touched,
+                handleBlur,
+                handleChange,
+                resetForm,
+              }) => (
+                <Box noValidate sx={{ mt: 1 }}>
+                  <form onSubmit={handleSubmit}>
+                    <InputLabel
+                      htmlFor="email"
+                      sx={{ color: "white", fontSize: "18px" }}
+                    >
+                      Enter your verification code
+                    </InputLabel>
+                    <TextField
+                      margin="normal"
+                      fullWidth
+                      variant="filled"
+                      sx={{ backgroundColor: "white" }}
+                      id="verificationCode"
+                      label="Your verification code"
+                      name="verificationCode"
+                      autoComplete="none"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.verificationCode}
+                      error={
+                        !!touched.verificationCode && !!errors.verificationCode
+                      }
+                      helperText={
+                        touched.verificationCode && errors.verificationCode
+                      }
+                    />
+
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      marginTop="10px"
+                    >
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        style={{
+                          backgroundColor: "red",
+                          fontSize: "15px",
+                          margin: "10px",
+                        }}
+                      >
+                        Verify
+                      </Button>
+                    </Box>
+                  </form>
+                </Box>
+              )}
+            </Formik>
+          </Box>
+        </Modal>
       </Grid>
     </ThemeProvider>
   );

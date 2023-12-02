@@ -25,16 +25,16 @@ const Topbar = () => {
   const [status, setStatus] = useState("");
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
-  const [ipAddress, setIpAddress] = useState('');
+  const [ipAddress, setIpAddress] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://ipinfo.io?token=151a5062f7d8bc');
+        const response = await fetch("https://ipinfo.io?token=151a5062f7d8bc");
         const data = await response.json();
         setIpAddress(data.ip);
       } catch (error) {
-        console.error('Error fetching IP address:', error);
+        console.error("Error fetching IP address:", error);
       }
     };
 
@@ -52,14 +52,14 @@ const Topbar = () => {
           <Header
             title="DASHBOARD"
             subtitle={`Hello! ${name}, Welcome to your dashboard`}
-            ipAddress = {`Your IP : ${ipAddress}`}
+            ipAddress={`Your IP : ${ipAddress}`}
           />
-        ) : 
+        ) : (
           <Header
             title="DASHBOARD"
             subtitle={`Hello! Welcome to your dashboard`}
           />
-        }
+        )}
       </Box>
       <Box>
         {user === "CIC" && status === "Start" ? (
@@ -136,18 +136,20 @@ const Topbar = () => {
         <IconButton>
           <PersonOutlinedIcon />
         </IconButton>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <IconButton
-            onClick={() => {
-              localStorage.removeItem("Role");
-              localStorage.removeItem("CenterCode");
-              localStorage.removeItem("User");
-              localStorage.removeItem("Status");
-            }}
-          >
-            <LogoutOutlined />
-          </IconButton>
-        </Link>
+        <Tooltip title={"Logout"} arrow>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <IconButton
+              onClick={() => {
+                localStorage.removeItem("Role");
+                localStorage.removeItem("CenterCode");
+                localStorage.removeItem("User");
+                localStorage.removeItem("Status");
+              }}
+            >
+              <LogoutOutlined />
+            </IconButton>
+          </Link>
+        </Tooltip>
       </Box>
     </Box>
   );

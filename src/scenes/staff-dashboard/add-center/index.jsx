@@ -115,7 +115,7 @@ const AddCenter = () => {
                 const response = await registerCenter(values);
                 console.log("sadasd",response);
                 if (
-                  response.data.o_sql_msg === "Insert the center successfully"
+                  response.data.o_sql_msg === "Insert the center successfully."
                 ) {
                   toast.success("Successfully Added New Center");
                 } else {
