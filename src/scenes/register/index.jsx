@@ -29,6 +29,7 @@ import {
 } from "../../services/studentAttendanceService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../global/Loader";
 
 const initialValues = {
   email: "",
@@ -94,6 +95,8 @@ const Register = () => {
   const [centers, setCenters] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+
+
   useEffect(() => {
     const fetchProvinceData = async () => {
       try {
@@ -181,10 +184,6 @@ const Register = () => {
                     if (response.data.o_sql_msg === "success") {
                       setStudentCode(response.data.retunValue);
                       handleOpen();
-                      // toast.success(
-                      //   "You are successfully registered for DP education"
-                      // );
-                      // navigate("/");
                     } else if (
                       response.data.o_sql_msg === "STUDENT ALREADY INSERT"
                     ) {
@@ -433,7 +432,7 @@ const Register = () => {
                   console.log("asd", response);
                   if (response.data.o_sql_msg === "success") {
                     toast.success(
-                      "You are successfully registered for DP education"
+                      "You are successfully registered for DP monitoring system"
                     );
 
                     navigate("/");
