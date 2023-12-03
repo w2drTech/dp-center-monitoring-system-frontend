@@ -194,7 +194,7 @@ function Carousel({ images }) {
                       variant="h2"
                       component="h2"
                     >
-                      HELLO.. {studentName}
+                      HELLO.. {studentName.toUpperCase()}
                     </Typography>
                     <Typography
                       id="modal-modal-description"

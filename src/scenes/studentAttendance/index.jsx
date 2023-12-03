@@ -20,7 +20,10 @@ import {
   getSelectedProvinceAttendanceForCircle,
 } from "../../services/getDistrictAttendance";
 import { getStatBoxData } from "../../services/statboxDataService";
-import { getSelectedDistrictAttendance, getSelectedDistrictAttendanceForCircle } from "../../services/getCenterAttendanceForSelectedDistrict";
+import {
+  getSelectedDistrictAttendance,
+  getSelectedDistrictAttendanceForCircle,
+} from "../../services/getCenterAttendanceForSelectedDistrict";
 import {
   getSelectedCenterAttendance,
   getSelectedCenterAttendanceForCircle,
@@ -55,6 +58,7 @@ const StudentAttendance = () => {
     setTodayStudents(responseOfCircleData.data.todayStudentCount);
     setCurrentStudents(responseOfCircleData.data.currentStudentCount);
     const response = await getSelectedProvinceAttendance(event.target.value);
+
     const districtArrays = {};
     // const districtColors = {
     //   COLOMBO: tokens("dark").greenAccent[500],
@@ -77,48 +81,71 @@ const StudentAttendance = () => {
         y: item.studentCount,
       });
     });
+    const allUniqueDates = Array.from(
+      new Set(response.data.map((item) => item.date))
+    );
+    Object.values(districtArrays).forEach((district) => {
+      const districtDates = district.data.map((dataPoint) => dataPoint.x);
+      
+      allUniqueDates.forEach((date) => {
+        if (!districtDates.includes(date)) {
+          district.data.push({
+            x: date,
+            y: 0,
+          });
+        }
+      });
+      district.data.sort((a, b) => {
+        const dateA = allUniqueDates.indexOf(a.x);
+        const dateB = allUniqueDates.indexOf(b.x);
+        return dateA - dateB;})
+      // Sort the data array by date
+      //district.data.sort((a, b) => a.x - b.x);
+    });
+
     const uniqueDistrictIDs = Object.keys(districtArrays);
 
     // Define an array of colors for each district dynamically
     const districtColors = {};
     uniqueDistrictIDs.forEach((districtID, index) => {
-        districtColors[districtID] = tokens("dark").greenAccent[500 + index * 100];
-        // Adjust the color generation as needed
+      districtColors[districtID] =
+        tokens("dark").greenAccent[500 + index * 100];
+      // Adjust the color generation as needed
     });
-    
+
     // Function to generate a random HSL color
     function getRandomColor() {
-        const hue = Math.floor(Math.random() * 360);
-        return `hsl(${hue}, 70%, 50%)`;
+      const hue = Math.floor(Math.random() * 360);
+      return `hsl(${hue}, 70%, 50%)`;
     }
-    
+
     // Use districtColors for each district array in districtArrays
-    Object.values(districtArrays).forEach(district => {
-        district.color = districtColors[district.id] || getRandomColor();
+    Object.values(districtArrays).forEach((district) => {
+      district.color = districtColors[district.id] || getRandomColor();
     });
     // Convert the object to an array of values
     const resultArray = Object.values(districtArrays);
     setLineChartData(resultArray);
   };
+  /////////////////////////
+  ///////////////////////////////////////////////////////
   const handleDistrictChange = async (event) => {
     setDistrict(event.target.value);
     const responseOfCircleData = await getSelectedDistrictAttendanceForCircle(
       event.target.value
     );
+
     setAllStudents(responseOfCircleData.data.allStudentCount);
     setTodayStudents(responseOfCircleData.data.todayStudentCount);
     setCurrentStudents(responseOfCircleData.data.currentStudentCount);
+
     const response = await getSelectedDistrictAttendance(event.target.value);
+
     const centersArray = {};
-    // const districtColors = {
-    //   COLOMBO: tokens("dark").greenAccent[500],
-    //   GAMPAHA: tokens("dark").blueAccent[500],
-    //   KALUTARA: tokens("dark").redAccent[500],
-    //   // Add more districts and colors as needed
-    // };
+
     response.data.forEach((item) => {
       const center = item.centerName;
-
+      
       if (!centersArray[center]) {
         centersArray[center] = {
           id: center.toLowerCase(), // Convert center name to lowercase for the id
@@ -126,34 +153,68 @@ const StudentAttendance = () => {
           data: [],
         };
       } // Push the current item to the corresponding center array
+
       centersArray[center].data.push({
         x: item.date,
         y: item.studentCount,
       });
     });
+    const allUniqueDates = Array.from(
+      new Set(response.data.map((item) => item.date))
+    );
+    
+    // Step 2: Ensure each district has data for all unique dates
+    Object.values(centersArray).forEach((district) => {
+      const districtDates = district.data.map((dataPoint) => dataPoint.x);
+      
+      allUniqueDates.forEach((date) => {
+        if (!districtDates.includes(date)) {
+          district.data.push({
+            x: date,
+            y: 0,
+          });
+        }
+      });
+      district.data.sort((a, b) => {
+        const dateA = allUniqueDates.indexOf(a.x);
+        const dateB = allUniqueDates.indexOf(b.x);
+        return dateA - dateB;})
+      // Sort the data array by date
+      //district.data.sort((a, b) => a.x - b.x);
+    });
+
+
+
+    
     const uniqueDistrictIDs = Object.keys(centersArray);
 
     // Define an array of colors for each district dynamically
     const districtColors = {};
     uniqueDistrictIDs.forEach((districtID, index) => {
-        districtColors[districtID] = tokens("dark").greenAccent[500 + index * 100];
-        // Adjust the color generation as needed
+      districtColors[districtID] =
+        tokens("dark").greenAccent[500 + index * 100];
+      // Adjust the color generation as needed
     });
-    
+
     // Function to generate a random HSL color
     function getRandomColor() {
-        const hue = Math.floor(Math.random() * 360);
-        return `hsl(${hue}, 70%, 50%)`;
+      const hue = Math.floor(Math.random() * 360);
+      return `hsl(${hue}, 70%, 50%)`;
     }
-    
+
     // Use districtColors for each district array in districtArrays
-    Object.values(centersArray).forEach(district => {
-        district.color = districtColors[district.id] || getRandomColor();
+    Object.values(centersArray).forEach((district) => {
+      district.color = districtColors[district.id] || getRandomColor();
     });
     // Convert the object to an array of values
     const resultArray = Object.values(centersArray);
+    console.log(resultArray)
     setLineChartData(resultArray);
   };
+
+
+
+
   const handleCenterChange = async (event) => {
     setCenter(event.target.value);
     const responseOfCircleData = await getSelectedCenterAttendanceForCircle(
@@ -174,6 +235,7 @@ const StudentAttendance = () => {
     setLineChartData(chartDataForCenter);
   };
   useEffect(() => {
+    console.log("Sdadsas");
     const fetchLineChartData = async () => {
       try {
         const response = await getStatBoxData();

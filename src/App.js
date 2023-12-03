@@ -76,7 +76,7 @@ function App() {
               >
                 <Route path="/dashboard" element={<DashboardLayout />}>
                   <Route
-                    path="executive2"
+                    path="executive"
                     element={<ExecutiveLevelDashboard />}
                   />
                   <Route
@@ -129,9 +129,10 @@ function App() {
                     element={<StudentAttendance />}
                   />
                   <Route
-                    path="add-center"
-                    element={<AddCenter />}
+                    path="pc-performance"
+                    element={<PCWorkHours />}
                   />
+                  <Route path="add-center" element={<AddCenter />} />
                   <Route
                     path="add-center-manager"
                     element={<AddCenterManager />}

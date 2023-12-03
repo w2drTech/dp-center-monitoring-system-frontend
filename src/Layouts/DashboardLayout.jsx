@@ -18,7 +18,7 @@ import PCWorkHours from "../scenes/execative-level-dashboard/pc-work-hours";
 const menuItems = [
   {
     title: "Dashboard",
-    to: "executive2",
+    to: "executive",
     icon: <HomeOutlinedIcon />,
   },
   {
@@ -69,13 +69,13 @@ const DashboardLayout = () => {
 
         <Routes>
           <Route
-            path="/executive2"
+            path="/executive"
             exact
             element={<ExecutiveLevelDashboard />}
           />
-          <Route path="/student-attendance" element={<StudentAttendance />} />
-          <Route path="/top-performance" element={<TopPerformance />} />
-          <Route path="/pc-performance" element={<PCWorkHours />} />
+          <Route path="student-attendance" element={<StudentAttendance />} />
+          <Route path="top-performance" element={<TopPerformance />} />
+          <Route path="pc-performance" element={<PCWorkHours />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </main>

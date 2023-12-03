@@ -18,6 +18,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import AddCenter from "../scenes/staff-dashboard/add-center";
 import AddCenterManager from "../scenes/staff-dashboard/add-center-manager";
+import PCWorkHours from "../scenes/execative-level-dashboard/pc-work-hours";
 const DpStaffDashboardLayout = () => {
   const menuItems = [
     {
@@ -87,13 +88,13 @@ const DpStaffDashboardLayout = () => {
         <Topbar />
 
         <Routes>
-          <Route path="/staff" exact element={<StaffDashboard />} />
-          <Route path="/student-attendance" element={<StudentAttendance />} />
-          <Route path="/add-center" element={<AddCenter />} />
+          <Route path="staff" exact element={<StaffDashboard />} />
+          <Route path="student-attendance" element={<StudentAttendance />} />
+          <Route path="add-center" element={<AddCenter />} />
           <Route path="add-center-manager" element={<AddCenterManager />} />
+          <Route path="pc-performance" element={<PCWorkHours />} />
           {/* <Route path="/view-all" element={<ViewAllStudents />} />
           <Route path="/today-students" element={<DailyStudentOverview />} />
-          <Route path="/pc-stats" element={<PCPerformanceStats />} />
           <Route path="/file-upload" element={<UploadFiles />} /> */}
           <Route path="*" element={<Notfound />} />
         </Routes>

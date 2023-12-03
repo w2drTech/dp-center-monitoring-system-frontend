@@ -26,11 +26,11 @@ const CenterManagerDashboardLayout = () => {
       to: "view-all",
       icon: <HowToRegIcon />,
     },
-    // {
-    //   title: "PC Performance Stats",
-    //   to: "pc-stats",
-    //   icon: <InsightsIcon />,
-    // },
+    {
+      title: "PC Performance Stats",
+      to: "pc-stats",
+      icon: <InsightsIcon />,
+    },
     {
       title: "Daily Analytics",
       icon: <SignalCellularAltIcon />,
@@ -61,10 +61,10 @@ const CenterManagerDashboardLayout = () => {
             exact
             element={<CenterInchargeDashboard />}
           />
-          <Route path="/view-all" element={<ViewAllStudents />} />
-          <Route path="/today-students" element={<DailyStudentOverview />} />
-          <Route path="/pc-stats" element={<PCPerformanceStats />} />
-          <Route path="/file-upload" element={<UploadFiles />} />
+          <Route path="view-all" element={<ViewAllStudents />} />
+          <Route path="today-students" element={<DailyStudentOverview />} />
+          <Route path="pc-stats" element={<PCPerformanceStats />} />
+          <Route path="file-upload" element={<UploadFiles />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </main>

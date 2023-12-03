@@ -48,7 +48,7 @@ export default function SignInSide() {
       localStorage.setItem("Role", response.data.userType);
       console.log(response);
       if (response.data.userType === "ADM") {
-        window.location.href = "dashboard/executive2";
+        window.location.href = "dashboard/executive";
       }
       else if(response.data.userType === "CIC")
       {
