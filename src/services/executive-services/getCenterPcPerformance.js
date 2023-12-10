@@ -11,7 +11,6 @@ export function getSelectedCenterPCPerformance(centerId)
 }
 export function getSelectedCenterPCPerformanceForCircle(centerId)
 {
-    
     return http.get(`${apiEndPointForCircles}/${centerId}`);  
 }
 

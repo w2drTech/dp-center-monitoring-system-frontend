@@ -1,9 +1,157 @@
-import Maintenance from "../../global/Maintenance";
+import { Box, Typography, useTheme, Button, IconButton } from "@mui/material";
+import { tokens } from "../../../theme";
+import StatBox from "../../../components/StatBox";
+import LineChart from "../../../components/LineChart";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+//import { getStatBoxData } from "../../services/statboxDataService";
 
+import "../../../../src/style.css";
+
+import {
+  getSelectedCenterAttendance,
+  getSelectedCenterAttendanceForCircle,
+} from "../../../services/getCenterAttendanceDetails";
+import {
+  getSelectedCenterPCPerformance,
+  getSelectedCenterPCPerformanceForCircle,
+} from "../../../services/executive-services/getCenterPcPerformance";
 const PCPerformanceStats = () => {
- 
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [lineChartData, setLineChartData] = useState([]);
+  const [allPCs, setAllPCs] = useState("");
+  const [todayPCs, setTodayPCs] = useState("");
+  const [workingPCs, setWorkingPCs] = useState("");
+  var [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStatBoxData = async () => {
+      const centerId = localStorage.getItem("CenterCode");
+      try {
+        const lineChartDataResponse = await getSelectedCenterPCPerformance(
+          centerId
+        );
+        setLineChartData(lineChartDataResponse.data);
+        const response = await getSelectedCenterPCPerformanceForCircle(
+          centerId
+        );
+        console.log(response);
+        setAllPCs(response.data.allPcCount);
+        setTodayPCs(response.data.todayWorkingPCs);
+        setWorkingPCs(response.data.currentWorkingPCs);
+        const chartData = [
+          {
+            id: "Total Students",
+            color: tokens("dark").greenAccent[500],
+            data: lineChartDataResponse.data,
+          },
+        ];
+        setLineChartData(chartData);
+      } catch (error) {
+        toast.error("Error fetching data");
+      }
+    };
+    fetchStatBoxData().then(() => setLoading((loading = false)));
+  }, []);
   return (
-    <Maintenance/>
+    <Box m="0 20px">
+      {loading === false ? (
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gridAutoRows="140px"
+          gap="20px"
+        >
+          {/* ROW 1 */}
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <StatBox
+              name="todayPCs"
+              title="Today PCs"
+              progress={`${(todayPCs / allPCs) * 100}`}
+              value={todayPCs}
+              fullStudentValue={allPCs}
+            />
+          </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* <StatBox
+              name="liveStudent"
+              title="Today PC Hours"
+              progress={`${(todayPCs / allPcs) * 100}`}
+              value={todayPCs}
+              fullStudentValue={allPcs}
+            /> */}
+          </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* <StatBox
+              name="liveCenters"
+              title="Live Working Centers"
+              progress={`${(workingCenters / allRegisteredCenters) * 100}`}
+              value=""
+              fullStudentValue=""
+            /> */}
+          </Box>
+          <Box
+            gridColumn="span 3"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* <Box>
+              <Typography variant="h5" padding={"10px"}>
+                Last Month Total Attendance : 0
+              </Typography>
+              <Typography variant="h5" padding={"10px"}>
+                Working Students : {`${workingStudent} / ${todayStudent}`}
+              </Typography>
+            </Box> */}
+            <StatBox
+              name="currentPCs"
+              title="Live Working PCs"
+              progress={`${(workingPCs / todayPCs) * 100}`}
+              value={workingPCs}
+              fullStudentValue={todayPCs}
+            />
+          </Box>
+          <Box
+            gridColumn="span 12"
+            gridRow="span 2"
+            backgroundColor={colors.primary[400]}
+          >
+            <Box height="345px" m="-20px 0 0 0">
+              <LineChart
+                isDashboard={true}
+                data={lineChartData}
+                leftAxisName="Student Count"
+                bottomAxisName="Date"
+                area={false}
+              />
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        <div id="cover-spin"></div>
+      )}
+    </Box>
   );
 };
 
