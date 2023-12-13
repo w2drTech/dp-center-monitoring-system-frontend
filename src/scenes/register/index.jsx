@@ -96,7 +96,6 @@ const Register = () => {
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
-
   useEffect(() => {
     const fetchProvinceData = async () => {
       try {
@@ -116,6 +115,7 @@ const Register = () => {
 
           setDistricts(response.data); // Assuming response is an array of districts
         } catch (error) {
+          console.log(error);
           toast.error("Error fetching data");
         }
       }
@@ -188,9 +188,20 @@ const Register = () => {
                       response.data.o_sql_msg === "STUDENT ALREADY INSERT"
                     ) {
                       toast.error("This email is already in use");
+                    } else if (
+                      response.data.o_sql_msg ===
+                      "AN EMAIL HAS BEEN SENT. PLEASE check YOUR INBOX!"
+                    ) {
+                      toast.error(
+                        "The verification code has been sent to the email you provided.Kindly check your inbox"
+                      );
+                      setOpen(true);
+                      handleOpen();
+                      setStudentCode(response.data.retunValue);
                     }
                   }, 2000);
                 } catch (ex) {
+                  console.log("Test", ex);
                   toast.error("Error fetching data");
                 }
               }}
@@ -457,12 +468,21 @@ const Register = () => {
               }) => (
                 <Box noValidate sx={{ mt: 1 }}>
                   <form onSubmit={handleSubmit}>
-                    <InputLabel
+                    <Typography
                       htmlFor="email"
-                      sx={{ color: "white", fontSize: "18px" }}
+                      sx={{
+                        color: "white",
+                        fontSize: "20px",
+                        wordWrap: "break-word",
+                      }}
                     >
-                      Enter your verification code
-                    </InputLabel>
+                      Enter Verification Code
+                    </Typography>
+                      (The verification code has been sent to the email you
+                      provided. Kindly check your inbox and enter the code here.)
+                    <Typography>
+
+                    </Typography>
                     <TextField
                       margin="normal"
                       fullWidth
