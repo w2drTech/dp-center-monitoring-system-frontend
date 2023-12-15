@@ -144,6 +144,7 @@ const Topbar = () => {
                 localStorage.removeItem("CenterCode");
                 localStorage.removeItem("User");
                 localStorage.removeItem("Status");
+                window.location.replace("/");
               }}
             >
               <LogoutOutlined />

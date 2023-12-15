@@ -89,6 +89,9 @@ function App() {
                   />
                   <Route path="top-performance" element={<TopPerformance />} />
                   <Route path="pc-performance" element={<PCWorkHours />} />
+                  <Route path="outlook" element={<OutlookUsers />} />
+                  <Route path="teams" element={<TeamsUsers />} />
+                  <Route path="yammer" element={<YammerUsers />} />
                 </Route>
               </Route>
 
@@ -132,31 +135,16 @@ function App() {
                     path="student-attendance"
                     element={<StudentAttendance />}
                   />
-                  <Route
-                    path="pc-performance"
-                    element={<PCWorkHours />}
-                  />
-                  <Route
-                    path="all-centers"
-                    element={<AllCenters />}
-                  />
+                  <Route path="pc-performance" element={<PCWorkHours />} />
+                  <Route path="all-centers" element={<AllCenters />} />
                   <Route path="add-center" element={<AddCenter />} />
                   <Route
                     path="add-center-manager"
                     element={<AddCenterManager />}
                   />
-                  <Route
-                    path="outlook"
-                    element={<OutlookUsers />}
-                  />
-                  <Route
-                    path="teams"
-                    element={<TeamsUsers />}
-                  />
-                  <Route
-                    path="yammer"
-                    element={<YammerUsers />}
-                  />
+                  <Route path="outlook" element={<OutlookUsers />} />
+                  <Route path="teams" element={<TeamsUsers />} />
+                  <Route path="yammer" element={<YammerUsers />} />
                 </Route>
               </Route>
               <Route path="*" element={<Notfound />} />

@@ -236,7 +236,6 @@ const StudentAttendance = () => {
     setLineChartData(chartDataForCenter);
   };
   useEffect(() => {
-    console.log("Sdadsas");
     const fetchLineChartData = async () => {
       try {
         const response = await getStatBoxData();
