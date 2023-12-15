@@ -6,6 +6,8 @@ import { tokens } from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import "react-pro-sidebar/dist/css/styles.css";
 import { useEffect } from "react";
+import { HomeOutlined } from "@mui/icons-material";
+import Diversity2Icon from "@mui/icons-material/Diversity2";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -23,7 +25,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     </MenuItem>
   );
 };
-const SidebarComponent = ({ menuItems }) => {
+const SidebarComponent = ({ menuItems, userType, to }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -144,6 +146,34 @@ const SidebarComponent = ({ menuItems }) => {
               )
             )}
           </Box>
+          {userType && userType === "ADM" ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={2} // Adjust the margin as needed
+            >
+              <Button
+                fullWidth={!isCollapsed}
+                style={{
+                  width: isCollapsed ? "40px" : "100%",
+                  color: colors.grey[100],
+                  fontSize: "17px",
+                }}
+              >
+                <a href={to} target="_blank">
+                  {isCollapsed ? (
+                    // Icon when collapsed
+                    <Diversity2Icon />
+                  ) : (
+                    // Text when not collapsed
+
+                    "Engage To Viva"
+                  )}
+                </a>
+              </Button>
+            </Box>
+          ) : null}
         </Menu>
       </ProSidebar>
     </Box>

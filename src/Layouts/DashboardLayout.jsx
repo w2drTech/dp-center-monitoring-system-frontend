@@ -90,17 +90,12 @@ const menuItems = [
       },
     ],
   },
-  {
-    title: "Engage To Viva",
-    to: "https://web.yammer.com/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIxNDEzNjI2NTExMzYifQ/new",
-    icon: <Diversity2Icon />,
-  },
 ];
 
 const DashboardLayout = () => {
   return (
     <div className="app">
-      <SidebarComponent menuItems={menuItems} />
+      <SidebarComponent menuItems={menuItems} userType={"ADM"} to="https://web.yammer.com/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIxNDEzNjI2NTExMzYifQ/new" />
       <main className="content">
         <Topbar />
 
