@@ -19,6 +19,16 @@ import AddLocationIcon from "@mui/icons-material/AddLocation";
 import AddCenter from "../scenes/staff-dashboard/add-center";
 import AddCenterManager from "../scenes/staff-dashboard/add-center-manager";
 import PCWorkHours from "../scenes/execative-level-dashboard/pc-work-hours";
+import OutlookUsers from "../scenes/staff-dashboard/ms-365-users/outlookusers";
+import TeamsUsers from "../scenes/staff-dashboard/ms-365-users/Teams-users";
+import YammerUsers from "../scenes/staff-dashboard/ms-365-users/yammer-users";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import GroupsIcon from '@mui/icons-material/Groups';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import AllCenters from "../scenes/staff-dashboard/all-centers";
 const DpStaffDashboardLayout = () => {
   const menuItems = [
     {
@@ -40,6 +50,11 @@ const DpStaffDashboardLayout = () => {
           to: "pc-performance",
           icon: <ComputerOutlinedIcon />,
         },
+        // {
+        //   title: "All Centers",
+        //   to: "all-centers",
+        //   icon: <ApartmentIcon />,
+        // },
       ],
     },
     // {
@@ -65,7 +80,7 @@ const DpStaffDashboardLayout = () => {
     // },
     {
       title: "Center Management",
-      icon: <SchoolOutlinedIcon />,
+      icon: <ManageHistoryIcon />,
       subItems: [
         {
           title: "Add Computer Center",
@@ -76,6 +91,27 @@ const DpStaffDashboardLayout = () => {
           title: "Add Center Manager",
           to: "add-center-manager",
           icon: <GroupAddIcon />,
+        },
+      ],
+    },
+    {
+      title: "MS 356 User Reports",
+      icon: <SummarizeIcon />,
+      subItems: [
+        {
+          title: "Outlook",
+          to: "outlook",
+          icon: <AlternateEmailIcon />,
+        },
+        {
+          title: "Teams",
+          to: "teams",
+          icon: <GroupsIcon />,
+        },
+        {
+          title: "Yammer",
+          to: "yammer",
+          icon: <Diversity3Icon />,
         },
       ],
     },
@@ -90,9 +126,13 @@ const DpStaffDashboardLayout = () => {
         <Routes>
           <Route path="staff" exact element={<StaffDashboard />} />
           <Route path="student-attendance" element={<StudentAttendance />} />
+          <Route path="all-centers" element={<AllCenters />} />
           <Route path="add-center" element={<AddCenter />} />
           <Route path="add-center-manager" element={<AddCenterManager />} />
           <Route path="pc-performance" element={<PCWorkHours />} />
+          <Route path="outlook" element={<OutlookUsers />} />
+          <Route path="teams" element={<TeamsUsers />} />
+          <Route path="yammer" element={<YammerUsers />} />
           {/* <Route path="/view-all" element={<ViewAllStudents />} />
           <Route path="/today-students" element={<DailyStudentOverview />} />
           <Route path="/file-upload" element={<UploadFiles />} /> */}

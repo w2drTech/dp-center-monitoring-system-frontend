@@ -76,6 +76,7 @@ const StudentAttendance = () => {
           data: [],
         };
       } // Push the current item to the corresponding district array
+    
       districtArrays[district].data.push({
         x: item.date,
         y: item.studentCount,

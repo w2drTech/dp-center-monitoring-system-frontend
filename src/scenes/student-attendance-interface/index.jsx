@@ -71,13 +71,12 @@ function Carousel({ images }) {
         pcId: pcId.toLocaleUpperCase(),
       };
       const response = await markAttendance(data);
+      console.log(response)
       const attendanceKey = response.data.retunValue;
-
-
       if (response.data.o_sql_msg === "success") {
         localStorage.setItem(studentAttendanceKey, attendanceKey);
         localStorage.setItem(studentNameKey, studentName);
-        window.location = "/";
+       // window.location = "/";
       } else if (
         response.data.o_sql_msg === "STUDENT ALREADY INSERTED LOGIN TIME"
       ) {
@@ -87,6 +86,11 @@ function Carousel({ images }) {
         response.data.o_sql_msg === "INVALID PC CODE"
       ) {
         toast.error("Error: Invalid PC ID. Please check PC ID and try again.");
+      }
+      else if (
+        response.data.o_sql_msg === "THIS PC ALREADY USED"
+      ) {
+        toast.error("Error: This PC Already In Use");
       }
     } catch (error) {
       // console.error("Error marking attendance:", error);

@@ -34,6 +34,10 @@ import DpStaffDashboardLayout from "./Layouts/DPStaffDashboard";
 import StaffDashboard from "./scenes/staff-dashboard/dashboard";
 import AddCenter from "./scenes/staff-dashboard/add-center";
 import AddCenterManager from "./scenes/staff-dashboard/add-center-manager";
+import OutlookUsers from "./scenes/staff-dashboard/ms-365-users/outlookusers";
+import TeamsUsers from "./scenes/staff-dashboard/ms-365-users/Teams-users";
+import YammerUsers from "./scenes/staff-dashboard/ms-365-users/yammer-users";
+import AllCenters from "./scenes/staff-dashboard/all-centers";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -132,10 +136,26 @@ function App() {
                     path="pc-performance"
                     element={<PCWorkHours />}
                   />
+                  <Route
+                    path="all-centers"
+                    element={<AllCenters />}
+                  />
                   <Route path="add-center" element={<AddCenter />} />
                   <Route
                     path="add-center-manager"
                     element={<AddCenterManager />}
+                  />
+                  <Route
+                    path="outlook"
+                    element={<OutlookUsers />}
+                  />
+                  <Route
+                    path="teams"
+                    element={<TeamsUsers />}
+                  />
+                  <Route
+                    path="yammer"
+                    element={<YammerUsers />}
                   />
                 </Route>
               </Route>

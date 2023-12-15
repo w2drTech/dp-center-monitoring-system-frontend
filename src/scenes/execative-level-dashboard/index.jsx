@@ -29,6 +29,7 @@ const ExecutiveLevelDashboard = () => {
 
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
+          console.log(lineChartDataResponse)
         setTodayStudent(response.data.dailyStudentCount);
         setWorkingStudents(response.data.currentStudentCount);
         setWorkingCenters(response.data.dailyCenterCount);
