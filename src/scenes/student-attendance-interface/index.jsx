@@ -76,7 +76,7 @@ function Carousel({ images }) {
       if (response.data.o_sql_msg === "success") {
         localStorage.setItem(studentAttendanceKey, attendanceKey);
         localStorage.setItem(studentNameKey, studentName);
-       // window.location = "/";
+        window.location = "/";
       } else if (
         response.data.o_sql_msg === "STUDENT ALREADY INSERTED LOGIN TIME"
       ) {
