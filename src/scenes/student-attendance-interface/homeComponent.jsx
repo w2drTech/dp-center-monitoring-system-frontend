@@ -30,6 +30,13 @@ const HomeComponent = ({ images }) => {
     setStudentName(stdName);
     setAttendanceKey(atdKey);
   });
+  // const keepAlive = async () => {
+  //   var xhr = new XMLHttpsRequest();
+  //   xhr.open("GET", "https://stu.dpedu.online/students/update/student/attendanceOut", true);
+  //   xhr.send();
+  //   console.log("Requested");
+  // };
+  // setInterval(keepAlive, 60000);
   const handleAttendanceMark = async () => {
     try {
       const response = await updateAttendance(attendanceKey);
@@ -143,7 +150,10 @@ const HomeComponent = ({ images }) => {
                           </a>
                         </Box>
                         <Box marginBottom="10px">
-                          <a href="https://outlook.office365.com/mail/?JitExp=1" target="_blank">
+                          <a
+                            href="https://outlook.office365.com/mail/?JitExp=1"
+                            target="_blank"
+                          >
                             <Button
                               variant="contained"
                               color="error"
@@ -164,24 +174,27 @@ const HomeComponent = ({ images }) => {
                           </a>
                         </Box>
                         <Box>
-                        <a href="https://studio.code.org/users/sign_in" target="_blank">
-                          <Button
-                            variant="contained"
-                            color="error"
-                            sx={{ width: "300px", height: "70px" }}
+                          <a
+                            href="https://studio.code.org/users/sign_in"
+                            target="_blank"
                           >
-                            <IconButton>
-                              <img
-                                src="../../../assets/code.png"
-                                alt="Your Image"
-                                width="50"
-                                height="50"
-                              />
-                            </IconButton>
-                            <Typography variant="h4">
-                              To code.org website
-                            </Typography>
-                          </Button>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              sx={{ width: "300px", height: "70px" }}
+                            >
+                              <IconButton>
+                                <img
+                                  src="../../../assets/code.png"
+                                  alt="Your Image"
+                                  width="50"
+                                  height="50"
+                                />
+                              </IconButton>
+                              <Typography variant="h4">
+                                To code.org website
+                              </Typography>
+                            </Button>
                           </a>
                         </Box>
                       </Box>

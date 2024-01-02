@@ -224,7 +224,7 @@ const PCWorkHours = () => {
     const response = await getSelectedCenterPCPerformance(event.target.value);
     const chartDataForCenter = [
       {
-        id: "Total Students",
+        id: "PC Work Hours",
         color: tokens("dark").greenAccent[500],
         data: response.data,
       },

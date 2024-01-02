@@ -143,7 +143,7 @@ const AddCenter = () => {
                     margin="normal"
                     fullWidth
                     variant="filled"
-                    id="centerCode"
+                    id="centerCode" 
                     label="Center Code"
                     name="centerCode"
                     autoFocus
