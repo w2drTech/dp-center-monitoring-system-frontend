@@ -29,6 +29,7 @@ import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AllCenters from "../scenes/staff-dashboard/all-centers";
+import ExecutiveLevelDashboard from "../scenes/execative-level-dashboard";
 
 const DpStaffDashboardLayout = () => {
   const menuItems = [
@@ -125,7 +126,7 @@ const DpStaffDashboardLayout = () => {
         <Topbar />
 
         <Routes>
-          <Route path="staff" exact element={<StaffDashboard />} />
+          <Route path="staff" exact element={<ExecutiveLevelDashboard />} />
           <Route path="student-attendance" element={<StudentAttendance />} />
           <Route path="all-centers" element={<AllCenters />} />
           <Route path="add-center" element={<AddCenter />} />

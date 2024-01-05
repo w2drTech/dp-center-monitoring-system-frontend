@@ -1,4 +1,11 @@
-import { Box, Typography, useTheme, Button, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  IconButton,
+  Modal,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import StatBox from "../../components/StatBox";
 import LineChart from "../../components/LineChart";
@@ -7,9 +14,26 @@ import { toast } from "react-toastify";
 import { getStatBoxData } from "../../services/statboxDataService";
 
 import "../../../src/style.css";
-import { getExecutiveDashboardLineChartData } from "../../services/lineChartDataService";
+import {
+  getExecutiveDashboardLineChartData,
+  getWorkingCentersData,
+} from "../../services/lineChartDataService";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 const ExecutiveLevelDashboard = () => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "1000px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    textAlign: "center",
+  };
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [todayStudent, setTodayStudent] = useState("");
@@ -22,6 +46,11 @@ const ExecutiveLevelDashboard = () => {
   const [allPcs, setAllPCCount] = useState("");
   const [todayPCs, setTodayPCCount] = useState("");
   var [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [workingCentersDetails, setWorkingCentersDetails] = useState("");
+
   useEffect(() => {
     const fetchStatBoxData = async () => {
       try {
@@ -29,7 +58,9 @@ const ExecutiveLevelDashboard = () => {
 
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
-          console.log(lineChartDataResponse)
+
+        const workingCentersDetailsResponse = await getWorkingCentersData();
+        setWorkingCentersDetails(workingCentersDetailsResponse.data);
         setTodayStudent(response.data.dailyStudentCount);
         setWorkingStudents(response.data.currentStudentCount);
         setWorkingCenters(response.data.dailyCenterCount);
@@ -51,8 +82,50 @@ const ExecutiveLevelDashboard = () => {
       }
     };
     fetchStatBoxData().then(() => setLoading((loading = false)));
-
   }, []);
+
+  const columns = [
+    {
+      field: "centerName",
+      headerName: "Center Name",
+      flex: 5,
+      renderCell: (params) => (
+        <Box style={{ textTransform: "uppercase" }}>{params.value}</Box>
+      ),
+    },
+    {
+      field: "loginTime",
+      headerName: "Opened Time",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "logoutTime",
+      headerName: "Closed Time",
+      flex: 2,
+      renderCell: (params) => (
+        <Typography variant="body2" color="textPrimary" fontSize={"15px"}>
+          {params.row.logoutTime === null
+            ? "Still Working"
+            : params.row.logoutTime}
+        </Typography>
+      ),
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "studentCount",
+      headerName: "Today Students",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "pcCount",
+      headerName: "Today PCs",
+      flex: 2,
+      cellClassName: "name-column--cell",
+    },
+  ];
+
   return (
     <Box m="0 20px">
       {loading === false ? (
@@ -99,6 +172,8 @@ const ExecutiveLevelDashboard = () => {
             display="flex"
             alignItems="center"
             justifyContent="center"
+            onClick={handleOpen}
+            style={{ cursor: "pointer" }}
           >
             <StatBox
               name="liveCenters"
@@ -139,6 +214,63 @@ const ExecutiveLevelDashboard = () => {
               />
             </Box>
           </Box>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="modal-modal-title"
+                variant="h2"
+                component="h2"
+              ></Typography>
+              <Typography id="modal-modal-description" variant="h3" sx={{}}>
+                Working Centers
+              </Typography>
+              <Box
+                display="grid"
+                height="78vh"
+                sx={{
+                  "& .MuiDataGrid-root": {
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    borderBottom: "none",
+                    fontSize: "15px",
+                  },
+                  "& .name-column--cell": {
+                    color: colors.primary[100],
+                  },
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: colors.blueAccent[700],
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-virtualScroller": {
+                    backgroundColor: colors.primary[400],
+                  },
+                  "& .MuiDataGrid-footerContainer": {
+                    borderTop: "none",
+                    backgroundColor: colors.blueAccent[700],
+                  },
+                  "& .MuiCheckbox-root": {
+                    color: `${colors.greenAccent[200]} !important`,
+                  },
+                  "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                    color: `${colors.redAccent[100]} !important`,
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={workingCentersDetails}
+                  getRowId={(row) => row.attendanceCode}
+                  columns={columns}
+                  components={{ Toolbar: GridToolbar }}
+                />
+              </Box>
+            </Box>
+          </Modal>
         </Box>
       ) : (
         <div id="cover-spin"></div>

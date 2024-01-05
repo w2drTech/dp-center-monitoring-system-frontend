@@ -1,4 +1,12 @@
-import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -26,7 +34,22 @@ const Topbar = () => {
   const [user, setUser] = useState("");
   const [name, setName] = useState("");
   const [ipAddress, setIpAddress] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    textAlign: "center",
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,6 +68,22 @@ const Topbar = () => {
     setName(localStorage.getItem("UserName"));
     setStatus(localStorage.getItem("Status") === "NULL" ? "Start" : "End");
   }, []);
+
+  const handleCenterLogout = async () => {
+    try {
+      const attendanceCode = localStorage.getItem("Status");
+      const centerId = localStorage.getItem("CenterCode");
+      const response = await setCenterEnd(attendanceCode, centerId);
+      localStorage.setItem("Status", "NULL");
+      toast.success("Successfully end the center");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       <Box>
@@ -101,24 +140,7 @@ const Topbar = () => {
           </Tooltip>
         ) : (
           <Tooltip title={`${status} The Center`} arrow>
-            <IconButton
-              onClick={async () => {
-                try {
-                  const attendanceCode = localStorage.getItem("Status");
-                  const centerId = localStorage.getItem("CenterCode");
-                  const response = await setCenterEnd(attendanceCode, centerId);
-                  localStorage.setItem("Status", "NULL");
-                  toast.success("Successfully end the center");
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 2000);
-                  console.log(response);
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
-              disabled={user !== "CIC"}
-            >
+            <IconButton onClick={handleOpen} disabled={user !== "CIC"}>
               <AlarmOffOutlined />
             </IconButton>
           </Tooltip>
@@ -152,6 +174,45 @@ const Topbar = () => {
           </Link>
         </Tooltip>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h4" component="h2">
+            Are you closing the center?
+          </Typography>
+          <Box display="flex" justifyContent="space-around" marginTop="30px">
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={handleCenterLogout}
+              style={{
+                backgroundColor: "red",
+                fontSize: "15px",
+                marginBottom: "10px",
+              }}
+            >
+              Yes
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              style={{
+                backgroundColor: "white",
+                fontSize: "15px",
+                marginBottom: "10px",
+                color: "red",
+              }}
+              onClick={handleClose}
+            >
+              No
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

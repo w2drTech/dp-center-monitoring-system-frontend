@@ -92,6 +92,10 @@ function Carousel({ images }) {
       ) {
         toast.error("Error: This PC Already In Use");
       }
+      else if( response.data.o_sql_msg === "YOUR CENTER HAS NOT STARTED YET")
+      {
+        toast.error("Error: Unable to mark attendance: The center you are attempting to mark attendance for has not started yet");
+      }
     } catch (error) {
       // console.error("Error marking attendance:", error);
       // if (error.response) {

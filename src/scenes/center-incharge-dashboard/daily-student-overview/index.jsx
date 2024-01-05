@@ -75,9 +75,10 @@ const DailyStudentOverview = () => {
       flex: 3,
       type: "number",
       headerAlign: "left",
+      cellClassName: "name-column--cell",
       align: "left",
       renderCell: (params) => (
-        <Typography variant="body2" color="textPrimary">
+        <Typography variant="body2" color="textPrimary" fontSize={"15px"}>
           {params.row.logoutTime === null
             ? "Still Working"
             : params.row.logoutTime}
@@ -95,7 +96,10 @@ const DailyStudentOverview = () => {
           <Button
             onClick={() => handleUpdate(params.id)}
             variant="contained"
-            style={{ backgroundColor: "#4cceac", color: "black" }}
+            style={{
+              backgroundColor: params.row.logoutTime != null ? "#d84705" : "#4cceac",
+              color: "black",
+            }}
             disabled={params.row.logoutTime != null}
           >
             {params.row.logoutTime != null ? "Logged Out" : "Logout"}
@@ -122,6 +126,7 @@ const DailyStudentOverview = () => {
             },
             "& .name-column--cell": {
               color: colors.primary[100],
+              
             },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],
