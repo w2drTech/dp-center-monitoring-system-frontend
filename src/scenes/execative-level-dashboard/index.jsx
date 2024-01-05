@@ -106,7 +106,7 @@ const ExecutiveLevelDashboard = () => {
       renderCell: (params) => (
         <Typography variant="body2" color="textPrimary" fontSize={"15px"}>
           {params.row.logoutTime === null
-            ? "Still Working"
+            ? "Still Open"
             : params.row.logoutTime}
         </Typography>
       ),
@@ -227,7 +227,7 @@ const ExecutiveLevelDashboard = () => {
                 component="h2"
               ></Typography>
               <Typography id="modal-modal-description" variant="h3" sx={{}}>
-                Working Centers
+                Today's Centers Status
               </Typography>
               <Box
                 display="grid"
