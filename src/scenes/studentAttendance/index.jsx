@@ -1,4 +1,10 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import * as React from "react";
 import InputLabel from "@mui/material/InputLabel";
@@ -25,6 +31,7 @@ import {
   getSelectedDistrictAttendanceForCircle,
 } from "../../services/getCenterAttendanceForSelectedDistrict";
 import {
+  getAllCenters,
   getSelectedCenterAttendance,
   getSelectedCenterAttendanceForCircle,
 } from "../../services/getCenterAttendanceDetails";
@@ -47,6 +54,7 @@ const StudentAttendance = () => {
   const [allStudents, setAllStudents] = useState("");
   const [todayStudents, setTodayStudents] = useState("");
   const [currentStudents, setCurrentStudents] = useState("");
+  const [allCenters, setAllCenters] = useState([]);
 
   const handleProvinceChange = async (event) => {
     setProvince(event.target.value);
@@ -76,7 +84,7 @@ const StudentAttendance = () => {
           data: [],
         };
       } // Push the current item to the corresponding district array
-    
+
       districtArrays[district].data.push({
         x: item.date,
         y: item.studentCount,
@@ -87,7 +95,7 @@ const StudentAttendance = () => {
     );
     Object.values(districtArrays).forEach((district) => {
       const districtDates = district.data.map((dataPoint) => dataPoint.x);
-      
+
       allUniqueDates.forEach((date) => {
         if (!districtDates.includes(date)) {
           district.data.push({
@@ -99,7 +107,8 @@ const StudentAttendance = () => {
       district.data.sort((a, b) => {
         const dateA = allUniqueDates.indexOf(a.x);
         const dateB = allUniqueDates.indexOf(b.x);
-        return dateA - dateB;})
+        return dateA - dateB;
+      });
       // Sort the data array by date
       //district.data.sort((a, b) => a.x - b.x);
     });
@@ -146,7 +155,7 @@ const StudentAttendance = () => {
 
     response.data.forEach((item) => {
       const center = item.centerName;
-      
+
       if (!centersArray[center]) {
         centersArray[center] = {
           id: center.toLowerCase(), // Convert center name to lowercase for the id
@@ -163,11 +172,11 @@ const StudentAttendance = () => {
     const allUniqueDates = Array.from(
       new Set(response.data.map((item) => item.date))
     );
-    
+
     // Step 2: Ensure each district has data for all unique dates
     Object.values(centersArray).forEach((district) => {
       const districtDates = district.data.map((dataPoint) => dataPoint.x);
-      
+
       allUniqueDates.forEach((date) => {
         if (!districtDates.includes(date)) {
           district.data.push({
@@ -179,14 +188,12 @@ const StudentAttendance = () => {
       district.data.sort((a, b) => {
         const dateA = allUniqueDates.indexOf(a.x);
         const dateB = allUniqueDates.indexOf(b.x);
-        return dateA - dateB;})
+        return dateA - dateB;
+      });
       // Sort the data array by date
       //district.data.sort((a, b) => a.x - b.x);
     });
 
-
-
-    
     const uniqueDistrictIDs = Object.keys(centersArray);
 
     // Define an array of colors for each district dynamically
@@ -209,12 +216,9 @@ const StudentAttendance = () => {
     });
     // Convert the object to an array of values
     const resultArray = Object.values(centersArray);
-    console.log(resultArray)
+    console.log(resultArray);
     setLineChartData(resultArray);
   };
-
-
-
 
   const handleCenterChange = async (event) => {
     setCenter(event.target.value);
@@ -245,6 +249,10 @@ const StudentAttendance = () => {
 
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
+
+        const allCentersListResponse = await getAllCenters();
+        console.log(allCentersListResponse);
+        setAllCenters(allCentersListResponse.data);
         const chartData = [
           {
             id: "Total Students",
@@ -299,6 +307,57 @@ const StudentAttendance = () => {
 
     fetchCenterData();
   }, [selectedDistrict]);
+
+  const handleSelect = async (selectedOption) => {
+    if (selectedOption) {
+      try {
+        const responseOfCircleData = await getSelectedCenterAttendanceForCircle(
+          selectedOption
+        );
+        setAllStudents(responseOfCircleData.data.allStudentCount);
+        setTodayStudents(responseOfCircleData.data.todayStudentCount);
+        setCurrentStudents(responseOfCircleData.data.currentStudentCount);
+
+        const response = await getSelectedCenterAttendance(selectedOption);
+        const chartDataForCenter = [
+          {
+            id: "Total Students",
+            color: tokens("dark").greenAccent[500],
+            data: response.data,
+          },
+        ];
+        setLineChartData(chartDataForCenter);
+      } catch (error) {
+        toast.error("Error fetching data.");
+      }
+    } else {
+      try {
+        const response = await getStatBoxData();
+        setAllStudents(response.data.allStudentCount);
+        setTodayStudents(response.data.dailyStudentCount);
+        setCurrentStudents(response.data.currentStudentCount);
+
+        const lineChartDataResponse =
+          await getExecutiveDashboardLineChartData();
+
+        const allCentersListResponse = await getAllCenters();
+        console.log(allCentersListResponse);
+        setAllCenters(allCentersListResponse.data);
+        const chartData = [
+          {
+            id: "Total Students",
+            color: tokens("dark").greenAccent[500],
+            data: lineChartDataResponse.data,
+          },
+        ];
+
+        setLineChartData(chartData);
+      } catch (error) {
+        toast.error("Error fetching data");
+      }
+    }
+  };
+
   if (loading) {
     return <div id="cover-spin"></div>;
   }
@@ -313,8 +372,7 @@ const StudentAttendance = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 4"
-          backgroundColor={colors.primary[400]}
+          gridColumn="span 3"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -348,8 +406,7 @@ const StudentAttendance = () => {
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
-          backgroundColor={colors.primary[400]}
+          gridColumn="span 3"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -383,8 +440,7 @@ const StudentAttendance = () => {
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
-          backgroundColor={colors.primary[400]}
+          gridColumn="span 3"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -410,6 +466,32 @@ const StudentAttendance = () => {
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl>
+          </Box>
+        </Box>
+       <Box
+          gridColumn="span 3"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box sx={{ minWidth: 250 }}>
+            <FormControl fullWidth>
+              <Autocomplete
+                options={allCenters}
+                getOptionLabel={(option) => option.centerName}
+                onChange={(event, value) =>
+                  handleSelect(value && value.centerCode)
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Search Center By Name"
+                    variant="filled"
+                    fullWidth
+                  />
+                )}
+              />
             </FormControl>
           </Box>
         </Box>

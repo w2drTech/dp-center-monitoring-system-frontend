@@ -1,4 +1,11 @@
-import { Box, Typography, useTheme, Button, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  IconButton,
+  Modal,
+} from "@mui/material";
 import { tokens } from "../../../theme";
 import StatBox from "../../../components/StatBox";
 import LineChart from "../../../components/LineChart";
@@ -16,7 +23,32 @@ import {
   getSelectedCenterPCPerformance,
   getSelectedCenterPCPerformanceForCircle,
 } from "../../../services/executive-services/getCenterPcPerformance";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { getNotMarkedPCs } from "../../../services/center-manager-services/pcService";
 const PCPerformanceStats = () => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "500px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    textAlign: "center",
+  };
+
+  const columns = [
+    {
+      field: "pcsCode",
+      headerName: "PC Id",
+      flex: 4,
+      renderCell: (params) => (
+        <Box style={{ textTransform: "uppercase" }}>{params.value}</Box>
+      ),
+    },
+  ];
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [lineChartData, setLineChartData] = useState([]);
@@ -24,6 +56,10 @@ const PCPerformanceStats = () => {
   const [todayPCs, setTodayPCs] = useState("");
   const [workingPCs, setWorkingPCs] = useState("");
   var [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [notMarkedPCs, setNotMarkedPCs] = useState("");
 
   useEffect(() => {
     const fetchStatBoxData = async () => {
@@ -36,7 +72,8 @@ const PCPerformanceStats = () => {
         const response = await getSelectedCenterPCPerformanceForCircle(
           centerId
         );
-        console.log(response);
+        const notMarkedPCResponse = await getNotMarkedPCs(centerId);
+        setNotMarkedPCs(notMarkedPCResponse.data);
         setAllPCs(response.data.allPcCount);
         setTodayPCs(response.data.todayWorkingPCs);
         setWorkingPCs(response.data.currentWorkingPCs);
@@ -115,6 +152,7 @@ const PCPerformanceStats = () => {
             display="flex"
             alignItems="center"
             justifyContent="center"
+            onClick={handleOpen}
           >
             {/* <Box>
               <Typography variant="h5" padding={"10px"}>
@@ -147,6 +185,63 @@ const PCPerformanceStats = () => {
               />
             </Box>
           </Box>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="modal-modal-title"
+                variant="h2"
+                component="h2"
+              ></Typography>
+              <Typography id="modal-modal-description" variant="h3" sx={{}}>
+                Non-Functional PCs
+              </Typography>
+              <Box
+                display="grid"
+                height="78vh"
+                sx={{
+                  "& .MuiDataGrid-root": {
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    borderBottom: "none",
+                    fontSize: "15px",
+                  },
+                  "& .name-column--cell": {
+                    color: colors.primary[100],
+                  },
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: colors.blueAccent[700],
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-virtualScroller": {
+                    backgroundColor: colors.primary[400],
+                  },
+                  "& .MuiDataGrid-footerContainer": {
+                    borderTop: "none",
+                    backgroundColor: colors.blueAccent[700],
+                  },
+                  "& .MuiCheckbox-root": {
+                    color: `${colors.greenAccent[200]} !important`,
+                  },
+                  "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                    color: `${colors.redAccent[100]} !important`,
+                  },
+                }}
+              >
+                <DataGrid
+                  rows={notMarkedPCs}
+                  getRowId={(row) => row.pcsCode}
+                  columns={columns}
+                  components={{ Toolbar: GridToolbar }}
+                />
+              </Box>
+            </Box>
+          </Modal>
         </Box>
       ) : (
         <div id="cover-spin"></div>
