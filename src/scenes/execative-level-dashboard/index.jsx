@@ -201,10 +201,10 @@ const ExecutiveLevelDashboard = () => {
           </Box>
           <Box
             gridColumn="span 12"
-            gridRow="span 2"
+            height={"350px"}
             backgroundColor={colors.primary[400]}
           >
-            <Box height="345px" m="-20px 0 0 0">
+            <Box height="345px" m="0 0 0 0">
               <LineChart
                 isDashboard={true}
                 data={lineChartData}

@@ -69,7 +69,7 @@ const LineChart = ({
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-      margin={{ top: 50, right: 110, bottom: 60, left: 60 }}
+      margin={{ top: 50, right: 100, bottom: 40, left: 50 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
@@ -98,7 +98,7 @@ const LineChart = ({
         tickPadding: 5,
         tickRotation: 0,
         legend: leftAxisName, // added
-        legendOffset: -30,
+        legendOffset: -40,
         legendPosition: "middle",
       }}
       lineWidth={3}
@@ -112,7 +112,6 @@ const LineChart = ({
       pointLabel={"y"}
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
-      enableArea={area}
       areaBaselineValue={1}
       motionConfig={"molasses"}
       useMesh={true}

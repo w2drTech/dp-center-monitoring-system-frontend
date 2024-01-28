@@ -63,6 +63,10 @@ export default function SignInSide() {
       {
         window.location.href = "dp-staff-dashboard/staff";
       }
+      else if(response.data.userType === "hmw")
+      {
+        window.location.href = "super-admin/admin";
+      }
     } catch (error) {
       toast.error("Invalid username or password");
     }

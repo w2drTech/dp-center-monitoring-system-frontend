@@ -195,7 +195,6 @@ const Register = () => {
                       toast.error(
                         "The verification code has been sent to the email you provided.Kindly check your inbox"
                       );
-                      setOpen(true);
                       handleOpen();
                       setStudentCode(response.data.retunValue);
                     }

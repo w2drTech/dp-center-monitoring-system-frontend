@@ -94,7 +94,7 @@ const SidebarComponent = ({ menuItems, userType, to }) => {
                   width="100px"
                   height="100px"
                   src={`../../assets/logo.png`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  style={{borderRadius: "50%" }}
                 />
               </Box>
               <Box textAlign="center">

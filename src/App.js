@@ -38,6 +38,9 @@ import OutlookUsers from "./scenes/staff-dashboard/ms-365-users/outlookusers";
 import TeamsUsers from "./scenes/staff-dashboard/ms-365-users/Teams-users";
 import YammerUsers from "./scenes/staff-dashboard/ms-365-users/yammer-users";
 import AllCenters from "./scenes/staff-dashboard/all-centers";
+import SuperAdminLayout from "./Layouts/SuperAdminLayout";
+import SuperAdminDashboard from "./scenes/super-admin-dashboard";
+import CenterPerformance from "./scenes/center-performance";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -87,7 +90,7 @@ function App() {
                     path="student-attendance"
                     element={<StudentAttendance />}
                   />
-                  <Route path="top-performance" element={<TopPerformance />} />
+                  <Route path="top-performance" element={<CenterPerformance />} />
                   <Route path="pc-performance" element={<PCWorkHours />} />
                   <Route path="outlook" element={<OutlookUsers />} />
                   <Route path="teams" element={<TeamsUsers />} />
@@ -145,6 +148,20 @@ function App() {
                   <Route path="outlook" element={<OutlookUsers />} />
                   <Route path="teams" element={<TeamsUsers />} />
                   <Route path="yammer" element={<YammerUsers />} />
+                </Route>
+              </Route>
+              <Route
+                element={
+                  <ProtectedRoute
+                    isAllowed={!!user && user.roles.includes("hmw")}
+                  />
+                }
+              >
+                <Route
+                  path="/super-admin"
+                  element={<SuperAdminLayout />}
+                >
+                  <Route path="admin" element={<SuperAdminDashboard />} />
                 </Route>
               </Route>
               <Route path="*" element={<Notfound />} />

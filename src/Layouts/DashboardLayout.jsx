@@ -25,6 +25,7 @@ import OutlookUsers from "../scenes/staff-dashboard/ms-365-users/outlookusers";
 import TeamsUsers from "../scenes/staff-dashboard/ms-365-users/Teams-users";
 import YammerUsers from "../scenes/staff-dashboard/ms-365-users/yammer-users";
 import Diversity2Icon from '@mui/icons-material/Diversity2';
+import CenterPerformance from "../scenes/center-performance";
 const menuItems = [
   {
     title: "Dashboard",
@@ -64,11 +65,11 @@ const menuItems = [
   //     },
   //   ],
   // },
-  // {
-  //   title: "Top Performance Centers",
-  //   to: "top-performance",
-  //   icon: <TrendingUpOutlinedIcon />,
-  // },
+  {
+    title: "Top Performance Centers",
+    to: "top-performance",
+    icon: <TrendingUpOutlinedIcon />,
+  },
   {
     title: "MS 356 User Reports",
     icon: <SummarizeIcon />,
@@ -106,7 +107,7 @@ const DashboardLayout = () => {
             element={<ExecutiveLevelDashboard />}
           />
           <Route path="student-attendance" element={<StudentAttendance />} />
-          <Route path="top-performance" element={<TopPerformance />} />
+          <Route path="top-performance" element={<CenterPerformance />} />
           <Route path="pc-performance" element={<PCWorkHours />} />
           <Route path="outlook" element={<OutlookUsers />} />
           <Route path="teams" element={<TeamsUsers />} />
