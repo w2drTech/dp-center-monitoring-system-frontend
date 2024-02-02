@@ -79,7 +79,7 @@ const PCPerformanceStats = () => {
         setWorkingPCs(response.data.currentWorkingPCs);
         const chartData = [
           {
-            id: "Total Students",
+            id: "PC Work Hours",
             color: tokens("dark").greenAccent[500],
             data: lineChartDataResponse.data,
           },
@@ -179,7 +179,7 @@ const PCPerformanceStats = () => {
               <LineChart
                 isDashboard={true}
                 data={lineChartData}
-                leftAxisName="Student Count"
+                leftAxisName="PC Work Hours (%)"
                 bottomAxisName="Date"
                 area={false}
               />
