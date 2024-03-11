@@ -35,10 +35,14 @@ import {
   getSelectedCenterAttendance,
   getSelectedCenterAttendanceForCircle,
 } from "../../services/getCenterAttendanceDetails";
+import { useDispatch } from "react-redux";
+import { SetCurrentPageTopic } from "../../store/action/headerChange";
 
 const StudentAttendance = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const dispatch = useDispatch();
+  dispatch(SetCurrentPageTopic("ATTENDANCE"));
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -68,12 +72,6 @@ const StudentAttendance = () => {
     const response = await getSelectedProvinceAttendance(event.target.value);
 
     const districtArrays = {};
-    // const districtColors = {
-    //   COLOMBO: tokens("dark").greenAccent[500],
-    //   GAMPAHA: tokens("dark").blueAccent[500],
-    //   KALUTARA: tokens("dark").redAccent[500],
-    //   // Add more districts and colors as needed
-    // };
     response.data.forEach((item) => {
       const district = item.district;
 
@@ -312,13 +310,9 @@ const StudentAttendance = () => {
     if (selectedOption) {
       try {
         const responseOfCircleData = await getSelectedCenterAttendanceForCircle(
-          selectedOption
+          selectedOption.centerCode
         );
-        setAllStudents(responseOfCircleData.data.allStudentCount);
-        setTodayStudents(responseOfCircleData.data.todayStudentCount);
-        setCurrentStudents(responseOfCircleData.data.currentStudentCount);
-
-        const response = await getSelectedCenterAttendance(selectedOption);
+        const response = await getSelectedCenterAttendance(selectedOption.centerCode);
         const chartDataForCenter = [
           {
             id: "Total Students",
@@ -326,23 +320,24 @@ const StudentAttendance = () => {
             data: response.data,
           },
         ];
+
+        setAllStudents(responseOfCircleData.data.allStudentCount);
+        setTodayStudents(responseOfCircleData.data.todayStudentCount);
+        setCurrentStudents(responseOfCircleData.data.currentStudentCount);
         setLineChartData(chartDataForCenter);
+
+        document.getElementById("province").innerHTML = selectedOption.provinceName
+        document.getElementById("district").innerHTML = selectedOption.districtName
+        document.getElementById("center").innerHTML = selectedOption.centerName
       } catch (error) {
         toast.error("Error fetching data.");
       }
     } else {
       try {
         const response = await getStatBoxData();
-        setAllStudents(response.data.allStudentCount);
-        setTodayStudents(response.data.dailyStudentCount);
-        setCurrentStudents(response.data.currentStudentCount);
-
         const lineChartDataResponse =
-          await getExecutiveDashboardLineChartData();
-
+        await getExecutiveDashboardLineChartData();
         const allCentersListResponse = await getAllCenters();
-        console.log(allCentersListResponse);
-        setAllCenters(allCentersListResponse.data);
         const chartData = [
           {
             id: "Total Students",
@@ -350,8 +345,16 @@ const StudentAttendance = () => {
             data: lineChartDataResponse.data,
           },
         ];
-
+        
+        setAllCenters(allCentersListResponse.data);
+        setAllStudents(response.data.allStudentCount);
+        setTodayStudents(response.data.dailyStudentCount);
+        setCurrentStudents(response.data.currentStudentCount);
         setLineChartData(chartData);
+
+        document.getElementById("province").innerHTML = "Province"
+        document.getElementById("district").innerHTML = "District"
+        document.getElementById("center").innerHTML = "Center"
       } catch (error) {
         toast.error("Error fetching data");
       }
@@ -481,7 +484,7 @@ const StudentAttendance = () => {
                 options={allCenters}
                 getOptionLabel={(option) => option.centerName}
                 onChange={(event, value) =>
-                  handleSelect(value && value.centerCode)
+                  handleSelect(value)
                 }
                 renderInput={(params) => (
                   <TextField
@@ -567,64 +570,3 @@ const StudentAttendance = () => {
 };
 
 export default StudentAttendance;
-/*        
-<Box
-gridColumn="span 3"
-backgroundColor={colors.primary[400]}
-display="flex"
-alignItems="center"
-justifyContent="center"
->
-<StatBox
-  name="todayStudent"
-  title="Today Students"
-  progress="0.75"
-  //progress={`${(todayStudent / allRegisteredStudents) * 100}`}
- // value={todayStudent}
- // fullStudentValue={allRegisteredStudents}
-/>
-</Box>
-<Box
-gridColumn="span 3"
-backgroundColor={colors.primary[400]}
-display="flex"
-alignItems="center"
-justifyContent="center"
->
-<StatBox
-  name="liveStudent"
-  title="Live Working Students"
-  //progress={`${(workingStudent / allRegisteredStudents) * 100}`}
-  //value={workingStudent}
-  //fullStudentValue={allRegisteredStudents}
-/>
-</Box>
-<Box
-gridColumn="span 3"
-backgroundColor={colors.primary[400]}
-display="flex"
-alignItems="center"
-justifyContent="center"
->
-<StatBox
-  name="liveCenters"
-  title="Live Working Centers"
-  //progress={`${(workingCenters / allRegisteredCenters) * 100}`}
-  //value={workingCenters}
-  //fullStudentValue={allRegisteredCenters}
-/>
-</Box>
-<Box
-gridColumn="span 3"
-backgroundColor={colors.primary[400]}
-display="flex"
-alignItems="center"
-justifyContent="center"
->
-<StatBox
-  name="computerHours"
-  title="Today Computer Hours"
-  //progress="0.30"
-  //value={computerHour}
-/>
-</Box>*/

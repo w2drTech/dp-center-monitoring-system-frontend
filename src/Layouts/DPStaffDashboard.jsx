@@ -3,15 +3,9 @@ import SidebarComponent from "../scenes/global/Sidebar";
 import Topbar from "../scenes/global/Topbar";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Notfound from "../scenes/NotFound/Notfound";
-
-import StaffDashboard from "../scenes/staff-dashboard/dashboard";
-
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import ChecklistRtlOutlinedIcon from "@mui/icons-material/ChecklistRtlOutlined";
 import ComputerOutlinedIcon from "@mui/icons-material/ComputerOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
-import FileOpenOutlinedIcon from "@mui/icons-material/FileOpenOutlined";
-import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import StudentAttendance from "../scenes/studentAttendance";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
@@ -27,11 +21,15 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import AllCenters from "../scenes/staff-dashboard/all-centers";
 import ExecutiveLevelDashboard from "../scenes/execative-level-dashboard";
+import CenterPerformance from "../scenes/center-performance";
+import Bonus from "../scenes/staff-dashboard/bonus";
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
+import SalaryDetails from "../scenes/staff-dashboard/bonus/salaryDetails";
+import { useState } from "react";
 
 const DpStaffDashboardLayout = () => {
+  const [test,setTest] = useState();
   const menuItems = [
     {
       title: "Dashboard",
@@ -46,40 +44,25 @@ const DpStaffDashboardLayout = () => {
           title: "Attendance Mapping",
           to: "student-attendance",
           icon: <HowToRegOutlinedIcon />,
+          onclick:()=>setTest("Attendance")
         },
         {
           title: "Work Hours Analysis: PCs",
           to: "pc-performance",
           icon: <ComputerOutlinedIcon />,
         },
-        // {
-        //   title: "All Centers",
-        //   to: "all-centers",
-        //   icon: <ApartmentIcon />,
-        // },
       ],
     },
-    // {
-    //   title: "Project Tracking",
-    //   icon: <ChecklistRtlOutlinedIcon />,
-    //   subItems: [
-    //     {
-    //       title: "Opened Projects",
-    //       to: "",
-    //       icon: <FileOpenOutlinedIcon />,
-    //     },
-    //     {
-    //       title: "Completed Projects",
-    //       to: "",
-    //       icon: <RuleOutlinedIcon />,
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Top Performance Centers",
-    //   to: "top-performance",
-    //   icon: <TrendingUpOutlinedIcon />,
-    // },
+    {
+      title: "Center's Performance Details",
+      to: "top-performance",
+      icon: <TrendingUpOutlinedIcon />,
+    },
+    {
+      title: "Bonus",
+      to: "center-bonus",
+      icon: <PriceCheckIcon />,
+    },
     {
       title: "Center Management",
       icon: <ManageHistoryIcon />,
@@ -123,26 +106,23 @@ const DpStaffDashboardLayout = () => {
     <div className="app">
       <SidebarComponent menuItems={menuItems} />
       <main className="content">
-        <Topbar />
-
+        <Topbar header = {test}/>
         <Routes>
           <Route path="staff" exact element={<ExecutiveLevelDashboard />} />
           <Route path="student-attendance" element={<StudentAttendance />} />
-          <Route path="all-centers" element={<AllCenters />} />
+          <Route path="center-bonus" element={<Bonus />} />
+          <Route path="salary-details" element={<SalaryDetails />} />
+          <Route path="top-performance" element={<CenterPerformance />} />
           <Route path="add-center" element={<AddCenter />} />
           <Route path="add-center-manager" element={<AddCenterManager />} />
           <Route path="pc-performance" element={<PCWorkHours />} />
           <Route path="outlook" element={<OutlookUsers />} />
           <Route path="teams" element={<TeamsUsers />} />
           <Route path="yammer" element={<YammerUsers />} />
-          {/* <Route path="/view-all" element={<ViewAllStudents />} />
-          <Route path="/today-students" element={<DailyStudentOverview />} />
-          <Route path="/file-upload" element={<UploadFiles />} /> */}
           <Route path="*" element={<Notfound />} />
         </Routes>
       </main>
     </div>
   );
 };
-
 export default DpStaffDashboardLayout;

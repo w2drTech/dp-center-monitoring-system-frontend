@@ -58,6 +58,7 @@ const SidebarComponent = ({ menuItems, userType, to }) => {
         "& .pro-menu-item.active": {
           color: "#6870fa !important",
         },
+        
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
@@ -107,7 +108,7 @@ const SidebarComponent = ({ menuItems, userType, to }) => {
                   DP EDUCATION
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Centers Monitoring System
+                Productivity Monitoring System
                 </Typography>
               </Box>
             </Box>

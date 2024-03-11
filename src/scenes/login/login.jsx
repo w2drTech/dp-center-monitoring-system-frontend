@@ -56,7 +56,7 @@ export default function SignInSide() {
         localStorage.setItem("Status",response.data.attendanceCode);
         localStorage.setItem("User",response.data.userCode);
         localStorage.setItem("UserName",response.data.userName);
-        
+        console.log(response)
         window.location.href = "staff-dashboard/center-manager";
       }
       else if(response.data.userType === "DPS")
@@ -80,7 +80,7 @@ export default function SignInSide() {
           item
           xs={false}
           sm={4}
-          md={7}
+          md={7} 
           sx={{
             backgroundImage:
               "url(https://source.unsplash.com/random?wallpapers)",
@@ -99,11 +99,18 @@ export default function SignInSide() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
+               <Box display="flex" justifyContent="center" alignItems="center">
+                <img
+                  alt="Company Logo"
+                  width="100px"
+                  height="100px"
+                  src={`../../assets/logo.png`}
+                  style={{borderRadius: "50%" }}
+                />
+              </Box>
+            
             <Typography component="h1" variant="h5">
-              Sign in
+              Admin Login
             </Typography>
             <Formik
               initialValues={initialValues}

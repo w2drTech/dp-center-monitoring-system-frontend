@@ -1,29 +1,20 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import "./style.css";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import PhotoIcon from "@mui/icons-material/Photo"; // Replace with your desired icon
-import { useLocation } from "react-router-dom";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import { updateAttendance } from "../../services/studentAttendanceService";
 import { toast } from "react-toastify";
+import { IconButton } from "@mui/material";
+import { useTheme } from "@emotion/react";
+import { tokens } from "../../theme";
 
-const HomeComponent = ({ images }) => {
-  const [current, setCurrent] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
+const HomeComponent = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [studentName, setStudentName] = useState("");
   const [attendanceKey, setAttendanceKey] = useState("");
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  let timeOut = null;
   useEffect(() => {
     const stdName = localStorage.getItem("studentName");
     const atdKey = localStorage.getItem("studentAttendanceKey");
@@ -54,160 +45,294 @@ const HomeComponent = ({ images }) => {
       toast.error(error.message);
     }
   };
-  const slideRight = () => {
-    setCurrent(current === images.length - 1 ? 0 : current + 1);
-  };
   return (
-    <div
-      className="carousel"
-      onMouseEnter={() => {
-        setAutoPlay(false);
-        clearTimeout(timeOut);
-      }}
-      onMouseLeave={() => {
-        setAutoPlay(true);
-      }}
-    >
-      <div className="carousel_wrapper">
-        {images.map((image, index) => {
-          return (
-            <div
-              key={index}
-              className={
-                index == current
-                  ? "carousel_card carousel_card-active"
-                  : "carousel_card"
-              }
+    <Box sx={{ background: colors.grey[100], height: "100vh" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography
+          variant="contained"
+          style={{
+            top: 0,
+            fontSize: "20px",
+            marginBottom: "10px",
+            margin: "10px",
+            color: "black",
+          }}
+        >
+          HELLO, {studentName}
+        </Typography>
+        <Button
+          variant="contained"
+          type="button"
+          onClick={handleAttendanceMark}
+          style={{
+            right: "30px",
+            backgroundColor: "black",
+            fontSize: "15px",
+            marginBottom: "10px",
+            margin: "10px",
+          }}
+        >
+          End Your Session
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
+          top: 0,
+          textAlign: "center",
+          maxWidth: "800px",
+          left: 250,
+        }}
+      >
+        <Typography
+          variant="h1"
+          sx={{
+            color: "#830000",
+            textAlign: "center",
+            fontFamily: "Helvetica, sans-serif",
+          }}
+        >
+          Productivity Monitoring System
+        </Typography>
+        <Typography variant="h2" sx={{ color: "#830000", textAlign: "center" }}>
+          ඵලදායිතා අධීක්ෂණ පද්ධතිය 2024
+        </Typography>
+      </Box>
+      <Box sx={{ display: "flex" }}>
+        <img
+          style={{ width: "300px", marginBottom: "50px", marginLeft: "50px" }}
+          src="IT campus en.png"
+          alt=""
+        />
+        <img style={{ width: "400px" }} src="IT campus Sinhala.png" alt="" />
+        <Box display="grid" alignItems="center" sx={{ marginLeft: "150px" }}>
+          <Typography
+            sx={{ textAlign: "center" }}
+            color="black"
+            gutterBottom
+            variant="h1"
+          >
+            Useful links
+          </Typography>
+          <Box marginBottom="10px">
+            <a href="https://dpcode.lk/" target="_blank">
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton sx={{ display: "flex" }}>
+                  <img
+                    src="../../../assets/dpcoding.png"
+                    alt="DP coding logo"
+                    width="100"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To DP Coding</Typography>
+              </Button>
+            </a>
+          </Box>
+          <Box marginBottom="10px">
+            <a
+              href="https://outlook.office365.com/mail/?JitExp=1"
+              target="_blank"
             >
-              <img className="card_image" src={image.image} alt="" />
-              <div className="card_overlay">
-                <Typography
-                  variant="contained"
-                  style={{
-                    top: 0,
-                    position: "absolute",
-                    fontSize: "15px",
-                    marginBottom: "10px",
-                    margin: "10px",
-                    width: "100px",
-                  }}
-                >
-                  {studentName}
-                </Typography>
-                <Card
-                  sx={{
-                    minWidth: 500,
-                    backgroundColor: "rgba(211, 205, 208, 0.36)",
-                  }}
-                >
-                  <CardContent>
-                    <Button
-                      variant="contained"
-                      type="button"
-                      onClick={handleAttendanceMark}
-                      style={{
-                        display: "flex",
-                        position: "absolute",
-                        right: "30px",
-                        backgroundColor: "black",
-                        fontSize: "15px",
-                        marginBottom: "10px",
-                        margin: "10px",
-                        width: "100px",
-                      }}
-                    >
-                      Logout
-                    </Button>
-                    <Typography
-                      sx={{ textAlign: "center" }}
-                      color="text.secondary"
-                      gutterBottom
-                      variant="h1"
-                    >
-                      Useful links
-                    </Typography>
-                  </CardContent>
-                  <Box>
-                    <CardActions sx={{ justifyContent: "center" }}>
-                      <Box display="grid">
-                        <Box marginBottom="10px">
-                          <a href="https://dpcode.lk/" target="_blank">
-                            <Button
-                              variant="contained"
-                              color="error"
-                              sx={{ width: "300px", height: "70px" }}
-                            >
-                              <IconButton sx={{ display: "flex" }}>
-                                <img
-                                  src="../../../assets/dpcoding.png"
-                                  alt="DP coding logo"
-                                  width="100"
-                                  height="50"
-                                />
-                              </IconButton>
-                              <Typography variant="h4">To DP Coding</Typography>
-                            </Button>
-                          </a>
-                        </Box>
-                        <Box marginBottom="10px">
-                          <a
-                            href="https://outlook.office365.com/mail/?JitExp=1"
-                            target="_blank"
-                          >
-                            <Button
-                              variant="contained"
-                              color="error"
-                              sx={{ width: "300px", height: "70px" }}
-                            >
-                              <IconButton>
-                                <img
-                                  src="../../../assets/outlooklogo.png"
-                                  alt="Your Image"
-                                  width="50"
-                                  height="50"
-                                />
-                              </IconButton>
-                              <Typography variant="h4">
-                                To Outlook Website
-                              </Typography>
-                            </Button>
-                          </a>
-                        </Box>
-                        <Box>
-                          <a
-                            href="https://studio.code.org/users/sign_in"
-                            target="_blank"
-                          >
-                            <Button
-                              variant="contained"
-                              color="error"
-                              sx={{ width: "300px", height: "70px" }}
-                            >
-                              <IconButton>
-                                <img
-                                  src="../../../assets/code.png"
-                                  alt="Your Image"
-                                  width="50"
-                                  height="50"
-                                />
-                              </IconButton>
-                              <Typography variant="h4">
-                                To code.org website
-                              </Typography>
-                            </Button>
-                          </a>
-                        </Box>
-                      </Box>
-                    </CardActions>
-                  </Box>
-                </Card>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton>
+                  <img
+                    src="../../../assets/outlooklogo.png"
+                    alt="Your Image"
+                    width="50"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To Outlook Website</Typography>
+              </Button>
+            </a>
+          </Box>
+          <Box>
+            <a href="https://studio.code.org/users/sign_in" target="_blank">
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton>
+                  <img
+                    src="../../../assets/code.png"
+                    alt="Your Image"
+                    width="50"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To code.org website</Typography>
+              </Button>
+            </a>
+          </Box>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          textAlign: "center",
+          position: "absolute",
+          display: "flex",
+          bottom: 0,
+          justifyContent: "center",
+          left: 600,
+        }}
+      >
+        <Typography variant="body3" color="black" align="center">
+          {"Copyright © "}
+          <a
+            style={{ color: "black" }}
+            href="https://dpeducation.lk/"
+            target="_blank"
+          >
+            DP Education
+          </a>{" "}
+          {new Date().getFullYear()}
+          {"."}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
 export default HomeComponent;
+/*
+  <Box sx={{}}>
+        <Box sx={{}}>
+          <Typography
+            variant="contained"
+            style={{
+              top: 0,
+              position: "absolute",
+              fontSize: "20px",
+              marginBottom: "10px",
+              margin: "10px",
+            }}
+          >
+            {studentName}
+          </Typography>
+
+          <Button
+            variant="contained"
+            type="button"
+            onClick={handleAttendanceMark}
+            style={{
+              display: "flex",
+              position: "absolute",
+              right: "30px",
+              backgroundColor: "black",
+              fontSize: "15px",
+              marginBottom: "10px",
+              margin: "10px",
+              width: "100px",
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          
+        </Box>
+      </Box>*/
+/*      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <img style={{ width: "400px" }} src="IT campus Sinhala.png" alt="" />
+        <img
+          style={{ width: "300px", marginBottom: "70px", marginLeft: "50px" }}
+          src="IT campus en.png"
+          alt=""
+        />
+      </Box> */
+
+/*<img style={{ width: "400px" }} src="IT campus Sinhala.png" alt="" />
+        <Box display="grid" justifyContent="center" alignItems="center">
+          <Typography
+            sx={{ textAlign: "center" }}
+            color="black"
+            gutterBottom
+            variant="h1"
+          >
+            Useful links
+          </Typography>
+          <Box marginBottom="10px">
+            <a href="https://dpcode.lk/" target="_blank">
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton sx={{ display: "flex" }}>
+                  <img
+                    src="../../../assets/dpcoding.png"
+                    alt="DP coding logo"
+                    width="100"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To DP Coding</Typography>
+              </Button>
+            </a>
+          </Box>
+          <Box marginBottom="10px">
+            <a
+              href="https://outlook.office365.com/mail/?JitExp=1"
+              target="_blank"
+            >
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton>
+                  <img
+                    src="../../../assets/outlooklogo.png"
+                    alt="Your Image"
+                    width="50"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To Outlook Website</Typography>
+              </Button>
+            </a>
+          </Box>
+          <Box>
+            <a href="https://studio.code.org/users/sign_in" target="_blank">
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "300px", height: "70px" }}
+              >
+                <IconButton>
+                  <img
+                    src="../../../assets/code.png"
+                    alt="Your Image"
+                    width="50"
+                    height="50"
+                  />
+                </IconButton>
+                <Typography variant="h4">To code.org website</Typography>
+              </Button>
+            </a>
+          </Box>
+        </Box>
+        <img
+          style={{ width: "300px", marginBottom: "70px", marginLeft: "50px" }}
+          src="IT campus en.png"
+          alt=""
+        />
+      </Box>*/

@@ -164,11 +164,17 @@ const Register = () => {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <VpnKeyOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h3">
-              Register
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <img
+                alt="Company Logo"
+                width="100px"
+                height="100px"
+                src={`../../assets/logo.png`}
+                style={{ borderRadius: "50%" }}
+              />
+            </Box>
+            <Typography component="h3" variant="h4">
+              Student Registration
             </Typography>
             <Formik
               initialValues={initialValues}
@@ -183,7 +189,11 @@ const Register = () => {
                   setTimeout(() => {
                     if (response.data.o_sql_msg === "success") {
                       setStudentCode(response.data.retunValue);
-                      handleOpen();
+                      toast.success(
+                        "You are successfully registered for DP monitoring system"
+                      );  
+                      navigate("/");
+                      //handleOpen();
                     } else if (
                       response.data.o_sql_msg === "STUDENT ALREADY INSERT"
                     ) {
@@ -195,7 +205,7 @@ const Register = () => {
                       toast.error(
                         "The verification code has been sent to the email you provided.Kindly check your inbox"
                       );
-                      handleOpen();
+                      //handleOpen();
                       setStudentCode(response.data.retunValue);
                     }
                   }, 2000);
@@ -235,7 +245,7 @@ const Register = () => {
                       variant="filled"
                       fullWidth
                       name="name"
-                      label="Name"
+                      label="Full Name"
                       type="text"
                       id="name"
                       onChange={handleChange}
@@ -394,8 +404,9 @@ const Register = () => {
                       variant="filled"
                       fullWidth
                       name="address"
-                      label="Address"
+                      label="Home Address"
                       type="address"
+                      required
                       id="address"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -418,7 +429,7 @@ const Register = () => {
             </Formik>
           </Box>
         </Grid>
-        <Modal
+        {/* <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
@@ -477,11 +488,9 @@ const Register = () => {
                     >
                       Enter Verification Code
                     </Typography>
-                      (The verification code has been sent to the email you
-                      provided. Kindly check your inbox and enter the code here.)
-                    <Typography>
-
-                    </Typography>
+                    (The verification code has been sent to the email you
+                    provided. Kindly check your inbox and enter the code here.)
+                    <Typography></Typography>
                     <TextField
                       margin="normal"
                       fullWidth
@@ -501,7 +510,6 @@ const Register = () => {
                         touched.verificationCode && errors.verificationCode
                       }
                     />
-
                     <Box
                       display="flex"
                       justifyContent="center"
@@ -524,7 +532,7 @@ const Register = () => {
               )}
             </Formik>
           </Box>
-        </Modal>
+        </Modal> */}
       </Grid>
     </ThemeProvider>
   );

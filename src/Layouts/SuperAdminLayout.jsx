@@ -28,7 +28,7 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import AllCenters from "../scenes/staff-dashboard/all-centers";
+import AllCenters from "../scenes/staff-dashboard/bonus";
 import ExecutiveLevelDashboard from "../scenes/execative-level-dashboard";
 import SuperAdminDashboard from "../scenes/super-admin-dashboard";
 

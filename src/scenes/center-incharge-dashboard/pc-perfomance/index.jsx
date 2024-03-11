@@ -2,8 +2,6 @@ import {
   Box,
   Typography,
   useTheme,
-  Button,
-  IconButton,
   Modal,
 } from "@mui/material";
 import { tokens } from "../../../theme";
@@ -15,10 +13,6 @@ import { toast } from "react-toastify";
 
 import "../../../../src/style.css";
 
-import {
-  getSelectedCenterAttendance,
-  getSelectedCenterAttendanceForCircle,
-} from "../../../services/getCenterAttendanceDetails";
 import {
   getSelectedCenterPCPerformance,
   getSelectedCenterPCPerformanceForCircle,

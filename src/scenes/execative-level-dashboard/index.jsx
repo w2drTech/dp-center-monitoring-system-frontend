@@ -2,8 +2,6 @@ import {
   Box,
   Typography,
   useTheme,
-  Button,
-  IconButton,
   Modal,
 } from "@mui/material";
 import { tokens } from "../../theme";
@@ -12,15 +10,20 @@ import LineChart from "../../components/LineChart";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getStatBoxData } from "../../services/statboxDataService";
-
 import "../../../src/style.css";
 import {
   getExecutiveDashboardLineChartData,
   getWorkingCentersData,
 } from "../../services/lineChartDataService";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useDispatch } from "react-redux";
+import { SetCurrentPageTopic } from "../../store/action/headerChange";
 
 const ExecutiveLevelDashboard = () => {
+
+  const dispatch = useDispatch();
+  dispatch(SetCurrentPageTopic("DASHBOARD"));
+
   const style = {
     position: "absolute",
     top: "50%",
