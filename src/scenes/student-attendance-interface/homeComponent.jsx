@@ -20,7 +20,13 @@ const HomeComponent = () => {
     const atdKey = localStorage.getItem("studentAttendanceKey");
     setStudentName(stdName);
     setAttendanceKey(atdKey);
-  });
+    // const interval = setInterval(() => {
+    //   window.location.reload();
+    // }, 5000);
+
+    // // Clean up the interval on unmount
+    // return () => clearInterval(interval);
+  },[]);
   // const keepAlive = async () => {
   //   var xhr = new XMLHttpsRequest();
   //   xhr.open("GET", "https://stu.dpedu.online/students/update/student/attendanceOut", true);
