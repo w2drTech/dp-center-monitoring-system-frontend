@@ -8,6 +8,7 @@ import {
   updateStudentAttendance,
 } from "../../../services/center-manager-services/getStudentData";
 import Loader from "../../global/Loader";
+import { putLogoutAllStudents } from "../../../services/center-manager-services/allStudentLogoutService";
 const DailyStudentOverview = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -22,7 +23,6 @@ const DailyStudentOverview = () => {
     const fetchAllStudentData = async () => {
       try {
         const response = await getCenterTodayStudents(centerId);
-        console.log(response)
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -45,10 +45,36 @@ const DailyStudentOverview = () => {
       }
     } catch (error) {
       toast.error("Something went wrong while login out the student");
-      console.log(error)
+      console.log(error);
     }
   };
+  const handleAllLogout = async () => {
+    try {
+      const centerId = localStorage.getItem("CenterCode");
+      const response = await putLogoutAllStudents(centerId);
+
+      if (response.data.o_sql_msg === "success") {
+        toast.success("Successfully logged out all of the students.");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+      else{
+        toast.error("Something went wrong while login out students");
+      }
+    } catch (error) {
+      toast.error("Something went wrong while login out students");
+      console.log(error);
+    }
+  };
+
   const columns = [
+    {
+      field: "studentCode",
+      headerName: "Student Id",
+      flex: 3,
+      cellClassName: "name-column--cell",
+    },
     {
       field: "name",
       headerName: "Name",
@@ -97,7 +123,8 @@ const DailyStudentOverview = () => {
             onClick={() => handleUpdate(params.id)}
             variant="contained"
             style={{
-              backgroundColor: params.row.logoutTime != null ? "#d84705" : "#4cceac",
+              backgroundColor:
+                params.row.logoutTime != null ? "#d84705" : "#4cceac",
               color: "black",
             }}
             disabled={params.row.logoutTime != null}
@@ -110,6 +137,24 @@ const DailyStudentOverview = () => {
   ];
   return (
     <Box m="0 20px">
+      <Button
+      onClick={handleAllLogout}
+        sx={{
+          position: "absolute",
+          background: "red",
+          right: 20,
+          marginTop: "-10px",
+          color: "white",
+          fontSize: "15px",
+          width: "110px",
+          "&:hover": {
+            background: "#d86100", // Change background color on hover
+            cursor: "pointer", // Change cursor to pointer on hover
+          },
+        }}
+      >
+        Logout all
+      </Button>
       {isLoading ? (
         <Loader />
       ) : (
@@ -126,7 +171,6 @@ const DailyStudentOverview = () => {
             },
             "& .name-column--cell": {
               color: colors.primary[100],
-              
             },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],

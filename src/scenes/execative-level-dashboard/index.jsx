@@ -55,7 +55,7 @@ const ExecutiveLevelDashboard = () => {
 
         const lineChartDataResponse =
           await getExecutiveDashboardLineChartData();
-
+        console.log(response)
         const workingCentersDetailsResponse = await getWorkingCentersData();
         setWorkingCentersDetails(workingCentersDetailsResponse.data);
         setTodayStudent(response.data.dailyStudentCount);
